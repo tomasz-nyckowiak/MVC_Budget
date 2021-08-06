@@ -20,7 +20,7 @@ class Config
      * Database name
      * @var string
      */
-    const DB_NAME = 'mvclogin';
+    const DB_NAME = 'mvcbudget';
 
     /**
      * Database user
@@ -32,7 +32,7 @@ class Config
      * Database password
      * @var string
      */
-    const DB_PASSWORD = 'secret';
+    const DB_PASSWORD = 'secret123';
 
     /**
      * Show or hide error messages on screen
