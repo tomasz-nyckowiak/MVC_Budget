@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\User;
+use \App\Models\DefaultCategories;
 use \App\Auth;
 use \App\Flash;
 
@@ -38,9 +39,9 @@ class Login extends \Core\Controller
 
         if ($user) {
 
-            Auth::login($user, $remember_me);
+            Auth::login($user, $remember_me);						
 
-			Flash::addMessage('Login successful');
+			Flash::addMessage('Login successful');			
 			
 			$this->redirect(Auth::getReturnToPage());
 

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Add income{% endblock %}
+
+{% block body %}
+
+    <h1>Add Income</h1>
+
+    <form method="post" action="/income/add" id="formAddincome">
+		
+		<div>
+			<label for="inputAmount">Kwota: </label>
+            <input type="number" step="0.01" name="amount" id="inputAmount" required>
+		</div>
+		<div>
+			<label for="inputDate">Data: </label>
+            <input type="date" name="date" value="{{ "now"|date("m/d/Y") }}" id="inputDate" required>
+		</div>
+		
+		<fieldset>				
+			<legend>Kategoria:</legend>
+			<div>
+			  <div>
+				<input type="radio" name="gridRadios" id="gridRadios1" value="Wynagrodzenie" checked>
+				<label for="gridRadios1">Wynagrodzenie</label>
+			  </div>
+			  <div>
+				<input type="radio" name="gridRadios" id="gridRadios2" value="Odsetki bankowe">
+				<label for="gridRadios2">Odsetki bankowe</label>
+			  </div>
+			  <div>
+				<input type="radio" name="gridRadios" id="gridRadios3" value="Sprzedaż na allegro">
+				<label for="gridRadios3">Sprzedaż na allegro</label>
+			  </div>
+			  <div>
+				<input type="radio" name="gridRadios" id="gridRadios4" value="Inne">
+				<label for="gridRadios4">Inne</label>
+			  </div>
+			</div>
+		</fieldset>
+		
+		<div>
+			<label for="CommentForIncome">Komentarz (opcjonalnie):</label>
+			<textarea name="comment" id="CommentForIncome" rows="3" cols="60" minlength="10"></textarea>
+		</div>
+		
+		<div>			
+            <input type="submit" value="Dodaj przychód">
+		</div>
+		<div>			
+            <button type="button" name="cancel">Anuluj</button>
+		</div>
+		
+	</form>
+
+{% endblock %}

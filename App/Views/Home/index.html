@@ -4,14 +4,18 @@
 
 {% block body %}
 
-    <h1>Welcome</h1>
+    <h1>Budżetowiec</h1>
 
     {% if current_user %}
-		Hello {{ current_user.username }}.
+		Hello {{ current_user.username }}.		
 		
-		<a href="/logout">Log out</a>
+		<p><a href="/income/new">Dodaj przychód</a>
+		<a href="/signup/new">Dodaj wydatek</a>
+		<a href="/signup/new">Przeglądaj bilans</a>
+		<a href="/signup/new">Ustawienia</a>
+		<a href="/logout">Wyloguj</a></p>
 	{% else %}
-		<a href="/signup/new">Sign up</a> or <a href="/login">log in</a>.
+		<a href="/signup/new">Rejestracja</a> or <a href="/login">Logowanie</a>.
 	{% endif %}
 
 {% endblock %}

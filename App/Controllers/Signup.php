@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\User;
+use \App\Models\DefaultCategories;
 
 class Signup extends \Core\Controller
 {
@@ -23,7 +24,15 @@ class Signup extends \Core\Controller
 
         if ($user->save()) {
 
-            $this->redirect('/signup/success');			
+            $def_cat = new DefaultCategories();
+			
+			$ID = DefaultCategories::getUserID();
+			
+			if ($def_cat->save($ID)) {
+				
+				$this->redirect('/signup/success');
+			}
+			//$this->redirect('/signup/success');			
 
         } else {
 
