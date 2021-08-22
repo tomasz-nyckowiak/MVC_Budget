@@ -28,7 +28,7 @@ class Signup extends \Core\Controller
 			
 			$ID = DefaultCategories::getUserID();
 			
-			if ($def_cat->save($ID)) {
+			if (($def_cat->saveIncomes($ID)) && ($def_cat->saveExpenses($ID)) && ($def_cat->savePayments($ID))) {
 				
 				$this->redirect('/signup/success');
 			}

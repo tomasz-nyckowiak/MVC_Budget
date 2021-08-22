@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Add expense{% endblock %}
+
+{% block body %}
+
+    <h1>Add Expense</h1>
+
+    <form method="post" action="/expense/add" id="formAddexpense">
+		
+		<div>
+			<label for="inputAmount">Kwota: </label>
+            <input type="number" step="0.01" name="amount" id="inputAmount" required>
+		</div>
+		<div>
+			<label for="inputDate">Data: </label>
+            <input type="date" name="date" value="{{ "now"|date("m/d/Y") }}" id="inputDate" required>
+		</div>
+		<div>
+			<label for="payments">Sposób płatności:</label>		
+			<select id="payments" name="paymentsMethods" aria-label="Sposób płatności">
+				<option name="paymentOptions" value="Gotówka">Gotówka</option>
+				<option name="paymentOptions" value="Karta debetowa">Karta debetowa</option>
+				<option name="paymentOptions" value="Karta kredytowa">Karta kredytowa</option>
+			</select>							
+		</div>
+		
+		<fieldset>				
+			<legend>Kategoria:</legend>
+			<div>
+			  <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Jedzenie">
+				<label for="inlineRadio1">Jedzenie</label>
+			  </div>
+			  <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Mieszkanie">
+				<label for="inlineRadio2">Mieszkanie</label>
+			  </div>
+			  <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Transport">
+				<label for="inlineRadio3">Transport</label>
+			  </div>
+			  <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="Telekomunikacja">
+				<label for="inlineRadio4">Telekomunikacja</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="Opieka zdrowotna">
+				<label for="inlineRadio5">Opieka zdrowotna</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio6" value="Ubranie">
+				<label for="inlineRadio6">Ubranie</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio7" value="Higiena">
+				<label for="inlineRadio7">Higiena</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio8" value="Dzieci">
+				<label for="inlineRadio8">Dzieci</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio9" value="Rozrywka">
+				<label for="inlineRadio9">Rozrywka</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio10" value="Wycieczka">
+				<label for="inlineRadio10">Wycieczka</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio11" value="Szkolenia">
+				<label for="inlineRadio11">Szkolenia</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio12" value="Książki">
+				<label for="inlineRadio12">Książki</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio13" value="Oszczędności">
+				<label for="inlineRadio13">Oszczędności</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio14" value="Na emeryturę">
+				<label for="inlineRadio14">Na emeryturę</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio15" value="Spłata długów">
+				<label for="inlineRadio15">Spłata długów</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio16" value="Darowizna">
+				<label for="inlineRadio16">Darowizna</label>
+			  </div>
+			   <div>
+				<input type="radio" name="inlineRadioOptions" id="inlineRadio17" value="Inne">
+				<label for="inlineRadio17">Inne</label>
+			  </div>
+			</div>
+		</fieldset>
+		
+		<div>
+			<label for="CommentForExpense">Komentarz (opcjonalnie):</label>
+			<textarea name="comment" id="CommentForExpense" rows="3" cols="60" minlength="10"></textarea>
+		</div>
+		
+		<div>			
+            <input type="submit" value="Dodaj wydatek">
+		</div>
+		<div>			
+            <input type="reset" value="Wyczyść">
+		</div>
+		
+	</form>
+
+{% endblock %}
