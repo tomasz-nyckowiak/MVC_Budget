@@ -2,10 +2,104 @@
 
 {% block title %}Balance{% endblock %}
 
+{% block footer %}
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	
+	<script>
+		window.onload = function()
+		{		 
+			CanvasJS.addColorSet("customColorSet",
+				[//colorSet Array
+				"#007FFF",
+				"#E6E600",
+				"#DC143C",
+				"#6E6F2F",
+				"#800080",                
+				"#8AA4B7",                
+				"#F23B1C",                
+				"#000080",                
+				"#FFC0CB",                
+				"#CADC79",                
+				"#4D1F1C",                
+				"#FAFAE7",                
+				"#9966CC",                
+				"#FFC000",                
+				"#7FFFD4",                
+				"#FAFFFA",                
+				"#9D5B03"                
+				]);
+			
+			var chart = new CanvasJS.Chart("chartContainer", {
+				colorSet: "customColorSet",
+				animationEnabled: true,
+				backgroundColor: "#2E8B57",
+				title: {					
+					fontFamily: "Arimo",
+					fontColor: "#C0C0C0",					
+					fontSize: 25,
+				},
+				data: [{
+					type: "pie",
+					indexLabel: "#percent%",
+					yValueFormatString: "#0.##",
+					toolTipContent: "{label} - (#percent%)",
+					indexLabelPlacement: "inside",
+					indexLabelFontColor: "#36454F",
+					indexLabelFontSize: 15,
+					indexLabelFontWeight: "bolder",
+					dataPoints: <?php echo json_encode($expensesOnChart, JSON_NUMERIC_CHECK); ?>
+				}]
+			});
+			chart.render();			 
+		}
+	</script>
+
+{% endblock %}
+
 {% block body %}
 
-    <h1>Balance</h1>
-
-    <p>Tables and chart</p>
+    <h1>Bilans</h1>
+	<h2>Przychody</h2>	
+	<ul>
+		{% for income in incomes %}			
+			<li>{{ income.category }} : {{ income.amount }}</li>			
+		{% endfor %}		
+		{% for sum in finalSums %}			
+			{% if sum.totalIncomes == 0 %}
+				<p>Brak przychodów!</p>
+			{% else %}
+				<li>Suma : {{ sum.totalIncomes }}</li>
+			{% endif %}				
+		{% endfor %}
+	</ul>
+	
+	<h2>Wydatki</h2>	
+	<ul>
+		{% for expense in expenses %}			
+			<li>{{ expense.category }} : {{ expense.amount }}</li>			
+		{% endfor %}
+		{% for sum in finalSums %}			
+			{% if sum.totalExpenses == 0 %}
+				<p>Brak wydatków!</p>
+			{% else %}
+				<li>Suma : {{ sum.totalExpenses }}</li>
+			{% endif %}						
+		{% endfor %}
+	</ul>
+	
+	<h2>Wykres</h2>
+	<div id="chartContainer">
+		{{ chart|json_encode|raw }}
+	</div>
+	
+	<h2>Bilans końcowy</h2>		
+			{% for sum in finalSums %}			
+				{% if sum.totalIncomes == 0 and sum.totalExpenses == 0 %}
+					<p>Brak przychodów i wydatków!</p>
+				{% else %}
+					{{ sum.total }} <br />
+					{{ sum.message }}
+				{% endif %}
+			{% endfor %}			
 
 {% endblock %}
