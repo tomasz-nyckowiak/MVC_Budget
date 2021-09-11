@@ -4,12 +4,19 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\Expenses;
+use \App\Dates;
 
-class Expense extends \Core\Controller
+class Expense extends Authenticated
 {
     public function newAction()
     {
-        View::renderTemplate('Expense/new.html');
+        $ID = $_SESSION['user_id'];
+		$categories = [];
+		
+		$categories['names'] = Expenses::categoriesAssignedToUser($ID);		
+		$categories['payments'] = Expenses::paymentsMethodsAssignedToUser($ID);
+		$categories['today'] = Dates::currentDate();
+		View::renderTemplate('Expense/new.html', $categories);
     }
 	
 	public function addAction()
@@ -25,7 +32,6 @@ class Expense extends \Core\Controller
             View::renderTemplate('Expense/new.html', [
                 'expense' => $expense
             ]);
-
         }        
     }
 	

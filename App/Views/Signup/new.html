@@ -7,11 +7,8 @@
     <script src="https://www.google.com/recaptcha/api.js"></script>
 
     <script>
-        /**
-         * Add jQuery Validation plugin method for a valid password
-         *
-         * Valid passwords contain at least one letter and one number.
-         */
+        /*Add jQuery Validation plugin method for a valid password
+        Valid passwords contain at least one letter and one number*/
         $.validator.addMethod('validPassword',
             function(value, element, param) {
 
@@ -31,9 +28,7 @@
 
         $(document).ready(function() {
 
-            /**
-             * Validate the form
-             */
+            //Validate the form
             $('#formSignup').validate({
                 rules: {
                     name: 'required',
@@ -54,15 +49,6 @@
                     }
                 }
             });
-
-
-            /**
-              * Show password toggle button
-              */            
-			/*$('#inputPassword').hideShowPassword({
-                show: false,
-                innerToggle: 'focus'
-            });*/
         });
     </script>
 
@@ -70,7 +56,7 @@
 
 {% block body %}
 
-    <h1>Sign up</h1>
+    <h2>Rejestracja</h2>
 
     {% if user.errors is not empty %}
         <p>Errors:</p>
@@ -83,25 +69,25 @@
 
     <form method="post" action="/signup/create" id="formSignup">
 
-        <div>
+        <div class="form-group">
             <label for="inputName">Imię: </label>
-            <input id="inputName" name="name" placeholder="Name" autofocus value="{{ user.name }}" required />
+            <input id="inputName" name="name" placeholder="Name" autofocus value="{{ user.name }}" required class="form-control">
         </div>
-        <div>
+        <div class="form-group">
             <label for="inputEmail">Adres e-mail:</label>
-            <input id="inputEmail" name="email" placeholder="email address" value="{{ user.email }}" required type="email" />
+            <input id="inputEmail" name="email" placeholder="email address" value="{{ user.email }}" required type="email" class="form-control">
         </div>
-        <div>
+        <div class="form-group">
             <label for="inputPassword">Hasło:</label>
-            <input type="password" id="inputPassword" class="active" name="password" placeholder="Password" required />
+            <input type="password" id="inputPassword" class="active" name="password" placeholder="Password" required class="form-control">
 			<i id="icon" class="fa fa-eye-slash"></i>
         </div>
-		<div>
+		<div class="form-group">
 			<label>
 				<input type="checkbox" name="terms">Akceptuję regulamin
 			</label>
 		</div>
-		<div>
+		<div class="form-group">
 			<div class="g-recaptcha" data-sitekey="6LcFQAwbAAAAABDEIdPwu5QWsJGYuGXtNXVyS4qa"></div>
 		</div>
 

@@ -4,8 +4,6 @@
 
 {% block body %}
 
-    <h1>Add Income</h1>
-
     <form method="post" action="/income/add" id="formAddincome">
 		
 		<div>
@@ -14,27 +12,27 @@
 		</div>
 		<div>
 			<label for="inputDate">Data: </label>
-            <input type="date" name="date" value="{{ "now"|date("m/d/Y") }}" id="inputDate" required>
+            <input type="date" name="date" value="{{ today }}" id="inputDate" required>
 		</div>
 		
 		<fieldset>				
 			<legend>Kategoria:</legend>
 			<div>
 			  <div>
-				<input type="radio" name="gridRadios" id="gridRadios1" value="Wynagrodzenie" checked>
-				<label for="gridRadios1">Wynagrodzenie</label>
+				<input type="radio" name="gridRadios" id="gridRadios1" value="{{ names[0] }}" checked>
+				<label for="gridRadios1">{{ names[0] }}</label>
 			  </div>
 			  <div>
-				<input type="radio" name="gridRadios" id="gridRadios2" value="Odsetki bankowe">
-				<label for="gridRadios2">Odsetki bankowe</label>
+				<input type="radio" name="gridRadios" id="gridRadios2" value="{{ names[1] }}">
+				<label for="gridRadios2">{{ names[1] }}</label>
 			  </div>
 			  <div>
-				<input type="radio" name="gridRadios" id="gridRadios3" value="Sprzedaż na allegro">
-				<label for="gridRadios3">Sprzedaż na allegro</label>
+				<input type="radio" name="gridRadios" id="gridRadios3" value="{{ names[2] }}">
+				<label for="gridRadios3">{{ names[2] }}</label>
 			  </div>
 			  <div>
-				<input type="radio" name="gridRadios" id="gridRadios4" value="Inne">
-				<label for="gridRadios4">Inne</label>
+				<input type="radio" name="gridRadios" id="gridRadios4" value="{{ names[3] }}">
+				<label for="gridRadios4">{{ names[3] }}</label>
 			  </div>
 			</div>
 		</fieldset>

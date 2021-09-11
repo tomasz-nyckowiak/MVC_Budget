@@ -3,63 +3,111 @@
 {% block title %}Balance{% endblock %}
 
 {% block footer %}
-	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-	
-	<script>
-		window.onload = function()
-		{		 
-			CanvasJS.addColorSet("customColorSet",
-				[//colorSet Array
-				"#007FFF",
-				"#E6E600",
-				"#DC143C",
-				"#6E6F2F",
-				"#800080",                
-				"#8AA4B7",                
-				"#F23B1C",                
-				"#000080",                
-				"#FFC0CB",                
-				"#CADC79",                
-				"#4D1F1C",                
-				"#FAFAE7",                
-				"#9966CC",                
-				"#FFC000",                
-				"#7FFFD4",                
-				"#FAFFFA",                
-				"#9D5B03"                
-				]);
+	<script src="/js/modal.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+	  google.charts.load('current', {'packages':['corechart']});
+	  google.charts.setOnLoadCallback(drawChart);
+
+	  function drawChart() {
+
+		var data = google.visualization.arrayToDataTable([
+			['Name', 'Value'],
+		  {% for pieCh in pieChart %}
+				['{{ pieCh.category }}', {{ pieCh['amount'] }}],
+			{% endfor %}
+		]);
+
+		var options = {
+		  title: 'Your expenses:'
+		};
+
+		var chart = new google.visualization.PieChart(document.getElementById('chartContainer'));
+
+		chart.draw(data, options);
+	  }
+	</script>		
+	<script type="text/javascript">
+		
+		$('#myModal').on('hidden.bs.modal', function(event) {
+			 document.getElementById("messageError").innerHTML="";
+			 document.getElementById("modalForm").reset();
+		});
+		
+		function checkModalDates() {			
 			
-			var chart = new CanvasJS.Chart("chartContainer", {
-				colorSet: "customColorSet",
-				animationEnabled: true,
-				backgroundColor: "#2E8B57",
-				title: {					
-					fontFamily: "Arimo",
-					fontColor: "#C0C0C0",					
-					fontSize: 25,
-				},
-				data: [{
-					type: "pie",
-					indexLabel: "#percent%",
-					yValueFormatString: "#0.##",
-					toolTipContent: "{label} - (#percent%)",
-					indexLabelPlacement: "inside",
-					indexLabelFontColor: "#36454F",
-					indexLabelFontSize: 15,
-					indexLabelFontWeight: "bolder",
-					dataPoints: <?php echo json_encode($expensesOnChart, JSON_NUMERIC_CHECK); ?>
-				}]
-			});
-			chart.render();			 
+			var v1 = document.getElementById("date1");
+			var v2 = document.getElementById("date2");			
+			date1 = new Date(v1.value);
+			date2 = new Date(v2.value);
+			
+			if (date1 > date2) {
+				document.getElementById("messageError").innerHTML="Pierwsza data musi być wcześniejsza od drugiej!";
+				$('#save').attr('disabled', true);
+			} else {				
+				$('#save').attr('disabled', false);
+				document.getElementById("messageError").innerHTML="";				
+			}			
 		}
 	</script>
+	
+	
 
 {% endblock %}
 
 {% block body %}
 
-    <h1>Bilans</h1>
-	<h2>Przychody</h2>	
+    <h2>Bilans</h2>		
+		<div class="dropdown">
+			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Wybierz okres</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<form method="post">
+						<button class="dropdown-item" type="submit" name="selectedCM" onclick="location.href='Balance/show.html'">bieżący miesiąc</button>
+						<button class="dropdown-item" type="submit" name="selectedPM" onclick="location.href='Balance/show.html'">poprzedni miesiąc</button>
+						<button class="dropdown-item" type="submit" name="selectedCY" onclick="location.href='Balance/show.html'">bieżący rok</button>
+						<div class="dropdown-divider" style="border-color:#C0C0C0;"></div>
+						<button class="dropdown-item" type="button" data-toggle="modal" data-target="#myModal">niestandardowy</button>
+					</form>
+				</div>
+		</div>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+				    <div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Wybierz własny zakres dat:</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						
+						<form id="modalForm" method="post">							
+							<label for="date1" class="col-form-label">Od:</label>
+							<input type="date" onchange="checkModalDates()" class="form-control" name="date1" id="date1" style="width:165px;" required>
+							
+							<label for="date2" class="col-form-label">do:</label>
+							<input type="date" onchange="checkModalDates()" class="form-control" name="date2" id="date2" style="width:165px;" required>
+													
+							<div id="messageError"></div>
+							<button type="submit" name="selectedCU" id="save" class="btn btn-primary" disabled>Zatwierdź</button>						
+						</form>
+						
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetModal()">Zamknij</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End of modal -->
+		
+		<div class="tekst">			
+			<p>Okres od {{ message.first_date }} do {{ message.second_date }}</p>	
+		</div>
+		
+	<h3>Przychody</h3>	
 	<ul>
 		{% for income in incomes %}			
 			<li>{{ income.category }} : {{ income.amount }}</li>			
@@ -73,7 +121,7 @@
 		{% endfor %}
 	</ul>
 	
-	<h2>Wydatki</h2>	
+	<h3>Wydatki</h3>	
 	<ul>
 		{% for expense in expenses %}			
 			<li>{{ expense.category }} : {{ expense.amount }}</li>			
@@ -87,12 +135,10 @@
 		{% endfor %}
 	</ul>
 	
-	<h2>Wykres</h2>
-	<div id="chartContainer">
-		{{ chart|json_encode|raw }}
-	</div>
+	<h3>Wykres</h3>
+	<div id="chartContainer" style="height: 350px; width: 350px;"></div>
 	
-	<h2>Bilans końcowy</h2>		
+	<h3>Bilans końcowy</h3>		
 			{% for sum in finalSums %}			
 				{% if sum.totalIncomes == 0 and sum.totalExpenses == 0 %}
 					<p>Brak przychodów i wydatków!</p>

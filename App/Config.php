@@ -2,47 +2,23 @@
 
 namespace App;
 
-/**
- * Application configuration
- *
- * PHP version 7.0
- */
 class Config
 {
-
-    /**
-     * Database host
-     * @var string
-     */
+    //Database host
     const DB_HOST = 'localhost';
 
-    /**
-     * Database name
-     * @var string
-     */
+    //Database name
     const DB_NAME = 'mvcbudget';
 
-    /**
-     * Database user
-     * @var string
-     */
+    //Database user
     const DB_USER = 'mvcuser';
 
-    /**
-     * Database password
-     * @var string
-     */
+    //Database password
     const DB_PASSWORD = 'secret123';
 
-    /**
-     * Show or hide error messages on screen
-     * @var boolean
-     */
+    //Show or hide error messages on screen
     const SHOW_ERRORS = true;
-	
-	/**
-     * Secret key for hashing
-     * @var boolean
-     */
+
+    //Secret key for hashing
     const SECRET_KEY = '6C38B8AC2EEC3BF896432313E38D9';
 }

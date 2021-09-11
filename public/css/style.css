@@ -1,0 +1,18 @@
+.mainHeader
+{	
+	height: 62px;	
+	font-size: 44px;
+	font-weight: 700;
+	letter-spacing: 5px;	
+	text-shadow: 1px 1px 0 #FFD700;
+	border-top: 2px solid #FFD700;
+	border-bottom: 2px solid #FFD700;
+	/* Background pattern from subtlepatterns.com */
+	background-image: url("/img/what-the-hex-dark.png");
+}
+
+body
+{
+	margin-top: 25px;
+	background-color: #2E8B57;
+}

@@ -4,16 +4,8 @@
 
 {% block body %}
 
-    <h1>Budżetowiec</h1>
-
     {% if current_user %}
-		Hello {{ current_user.username }}.		
-		
-		<p><a href="/income/new">Dodaj przychód</a>
-		<a href="/expense/new">Dodaj wydatek</a>
-		<a href="/balance/show">Przeglądaj bilans</a>
-		<a href="/signup/new">Ustawienia</a>
-		<a href="/logout">Wyloguj</a></p>
+		Witaj {{ current_user.username }}.			
 	{% else %}
 		<a href="/signup/new">Rejestracja</a> or <a href="/login">Logowanie</a>.
 	{% endif %}

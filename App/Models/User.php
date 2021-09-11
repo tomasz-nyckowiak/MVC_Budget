@@ -4,29 +4,15 @@ namespace App\Models;
 
 use PDO;
 use \App\Token;
+use \App\Emails;
+use \Core\View;
 
-/**
- * User model
- *
- * PHP version 7.0
- */
 class User extends \Core\Model
 {
-
-    /**
-     * Error messages
-     *
-     * @var array
-     */
+    //Error messages
     public $errors = [];
-
-    /**
-     * Class constructor
-     *
-     * @param array $data  Initial property values (optional)
-     *
-     * @return void
-     */
+    
+    //Class constructor
     public function __construct($data = [])
     {
         foreach ($data as $key => $value) {
@@ -34,11 +20,7 @@ class User extends \Core\Model
         };
     }
 
-    /**
-     * Save the user model with the current property values
-     *
-     * @return boolean  True if the user was saved, false otherwise
-     */
+    //Save the user model with the current property values
     public function save()
     {
         $this->validate();
@@ -46,9 +28,13 @@ class User extends \Core\Model
         if (empty($this->errors)) {
 
             $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
+			
+			$token = new Token();
+			$hashed_token = $token->getHash();
+			$this->activation_token = $token->getValue();
 
-            $sql = 'INSERT INTO users (username, email, password)
-                    VALUES (:name, :email, :password_hash)';
+            $sql = 'INSERT INTO users (username, email, password, activation_hash)
+                    VALUES (:name, :email, :password_hash, :activation_hash)';
 
             $db = static::getDB();
             $stmt = $db->prepare($sql);
@@ -56,6 +42,7 @@ class User extends \Core\Model
             $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
             $stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
+            $stmt->bindValue(':activation_hash', $hashed_token, PDO::PARAM_STR);
 
             return $stmt->execute();
         }
@@ -63,19 +50,15 @@ class User extends \Core\Model
         return false;
     }
 
-    /**
-     * Validate current property values, adding valiation error messages to the errors array property
-     *
-     * @return void
-     */
+    //Validate current property values, adding valiation error messages to the errors array property
     public function validate()
     {
-        // Name
+        //Name
         if ($this->name == '') {
             $this->errors[] = 'Name is required';
         }
 
-        // email address
+        //email address
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
             $this->errors[] = 'Invalid email';
         }
@@ -83,7 +66,7 @@ class User extends \Core\Model
             $this->errors[] = 'email already taken';
         }
 
-        // Password
+        //Password
         if (strlen($this->password) < 6) {
             $this->errors[] = 'Please enter at least 6 characters for the password';
         }
@@ -97,25 +80,13 @@ class User extends \Core\Model
         }
     }
 
-    /**
-     * See if a user record already exists with the specified email
-     *
-     * @param string $email email address to search for
-     *
-     * @return boolean  True if a record already exists with the specified email, false otherwise
-     */
+    //See if a user record already exists with the specified email
     public static function emailExists($email)
     {
         return static::findByEmail($email) !== false;
     }
 
-    /**
-     * Find a user model by email address
-     *
-     * @param string $email email address to search for
-     *
-     * @return mixed User object if found, false otherwise
-     */
+    //Find a user model by email address
     public static function findByEmail($email)
     {
         $sql = 'SELECT * FROM users WHERE email = :email';
@@ -131,19 +102,10 @@ class User extends \Core\Model
         return $stmt->fetch();
     }
 
-    /**
-     * Authenticate a user by email and password.
-     *
-     * @param string $email email address
-     * @param string $password password
-     *
-     * @return mixed  The user object or false if authentication fails
-     */
+    //Authenticate a user by email and password
     public static function authenticate($email, $password)
     {
         $user = static::findByEmail($email);
-		
-		/*var_dump($user);*/
 
         if ($user) {
             if (password_verify($password, $user->password)) {
@@ -154,7 +116,7 @@ class User extends \Core\Model
         return false;
     }
 	
-	/*Find a user model by ID*/
+	//Find a user model by ID
 	public static function findByID($id)
     {
         $sql = 'SELECT * FROM users WHERE id = :id';
@@ -169,21 +131,15 @@ class User extends \Core\Model
 
         return $stmt->fetch();
     }
-	
-	/**
-     * Remember the login by inserting a new unique token into the remembered_logins table
-     * for this user record
-     *
-     * @return boolean  True if the login was remembered successfully, false otherwise
-     */
+
+    //Remember the login by inserting a new unique token into the remembered_logins table
 	 public function rememberLogin()
     {
         $token = new Token();
         $hashed_token = $token->getHash();
         $this->remember_token = $token->getValue();
 
-        //$expiry_timestamp = time() + 60 * 60 * 24 * 30;  // 30 days from now
-        $this->expiry_timestamp = time() + 60 * 60 * 24 * 30;  // 30 days from now
+        $this->expiry_timestamp = time() + 60 * 60 * 24 * 30;  //30 days from now
 
         $sql = 'INSERT INTO remembered_logins (token_hash, user_id, expires_at)
                 VALUES (:token_hash, :user_id, :expires_at)';
@@ -193,9 +149,79 @@ class User extends \Core\Model
 
         $stmt->bindValue(':token_hash', $hashed_token, PDO::PARAM_STR);
         $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
-        //$stmt->bindValue(':expires_at', date('Y-m-d H:i:s', $expiry_timestamp), PDO::PARAM_STR);
         $stmt->bindValue(':expires_at', date('Y-m-d H:i:s', $this->expiry_timestamp), PDO::PARAM_STR);
 
         return $stmt->execute();
     }
+	
+	//Send an email to the user containing the activation link
+	public function sendActivationEmail()
+	{
+		$url = 'http://' . $_SERVER['HTTP_HOST'] . '/signup/activate/' . $this->activation_token;
+
+        $text = View::getTemplate('Signup/activation_email.txt', ['url' => $url]);
+        $html = View::getTemplate('Signup/activation_email.html', ['url' => $url]);
+
+        Emails::send($this->email, 'Account activation', $text, $html);
+	}
+	
+	/*Copy default data to proper records:
+	- incomes_default_categories --> incomes_categories_assigned_to_users
+	- expenses_default_categories --> expenses_categories_assigned_to_users
+	- payments_deafult_methods --> payments_methods_assigned_to_users						
+	*/
+	
+	//Incomes
+	public function saveIncomes()
+    {		
+		if (empty($this->errors)) {
+
+            $sql = "INSERT INTO incomes_categories_assigned_to_users (user_id, name) SELECT users.id, incomes_default_categories.name FROM users, incomes_default_categories WHERE users.email = :email";					
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+			
+			$stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }
+	
+	//Expenses
+	public function saveExpenses()
+    {		
+		if (empty($this->errors)) {
+
+            $sql = "INSERT INTO expenses_categories_assigned_to_users (user_id, name) SELECT users.id, expenses_default_categories.name FROM users, expenses_default_categories WHERE users.email = :email";					
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+			
+			$stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }
+	
+	//Payments
+	public function savePayments()
+    {		
+		if (empty($this->errors)) {
+
+            $sql = "INSERT INTO payments_methods_assigned_to_users (user_id, name) SELECT users.id, payments_deafult_methods.name FROM users, payments_deafult_methods WHERE users.email = :email";					
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+			
+			$stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+
+            return $stmt->execute();
+        }
+
+        return false;
+    }	
 }

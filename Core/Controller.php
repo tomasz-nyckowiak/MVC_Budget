@@ -2,43 +2,29 @@
 
 namespace Core;
 
-/**
- * Base controller
- *
- * PHP version 7.0
- */
+use \App\Auth;
+use \App\Flash;
+
+//Base controller
 abstract class Controller
 {
-
-    /**
-     * Parameters from the matched route
-     * @var array
-     */
+    //Parameters from the matched route
     protected $route_params = [];
 
-    /**
-     * Class constructor
-     *
-     * @param array $route_params  Parameters from the route
-     *
-     * @return void
-     */
+    /*Class constructor
+    @param array $route_params  Parameters from the route*/
     public function __construct($route_params)
     {
         $this->route_params = $route_params;
     }
 
-    /**
-     * Magic method called when a non-existent or inaccessible method is
-     * called on an object of this class. Used to execute before and after
-     * filter methods on action methods. Action methods need to be named
-     * with an "Action" suffix, e.g. indexAction, showAction etc.
-     *
-     * @param string $name  Method name
-     * @param array $args Arguments passed to the method
-     *
-     * @return void
-     */
+    /*Magic method called when a non-existent or inaccessible method is
+    called on an object of this class. Used to execute before and after
+    filter methods on action methods. Action methods need to be named
+    with an "Action" suffix, e.g. indexAction, showAction etc.
+    
+    @param string $name  Method name
+    @param array $args Arguments passed to the method*/
     public function __call($name, $args)
     {
         $method = $name . 'Action';
@@ -53,21 +39,34 @@ abstract class Controller
         }
     }
 
-    /**
-     * Before filter - called before an action method.
-     *
-     * @return void
-     */
+    //Before filter - called before an action method
     protected function before()
     {
     }
-
-    /**
-     * After filter - called after an action method.
-     *
-     * @return void
-     */
+    
+    //After filter - called after an action method
     protected function after()
     {
     }
+	
+	//Redirect to a different page
+	public function redirect($url)
+	{
+		header('Location: http://' . $_SERVER['HTTP_HOST'] . $url, true, 303);
+		exit;
+	}
+	
+	/*Require the user to be logged in before giving access to the requested page.
+	    Remember the requested page for later, then redirect to the login page.*/
+	public function requireLogin()
+	{
+		if (! Auth::getUser()) {
+            
+			Flash::addMessage('Please login to access that page', Flash::INFO);
+			
+			Auth::rememberRequestedPage();
+			
+			$this->redirect('/login');
+        }
+	}
 }

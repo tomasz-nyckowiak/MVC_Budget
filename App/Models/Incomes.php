@@ -4,7 +4,6 @@ namespace App\Models;
 
 use PDO;
 
-//Income model
 class Incomes extends \Core\Model
 {
 	public $errors = [];
@@ -26,8 +25,8 @@ class Incomes extends \Core\Model
 			$chosen_category = $_POST['gridRadios'];
 			$comment = $_POST['comment'];
 			
-			$category_id = Incomes::copyNumberOfCategory($user_id, $chosen_category);			
-
+			$category_id = Incomes::copyNumberOfCategory($user_id, $chosen_category);
+			
             $sql = 'INSERT INTO incomes (user_id, income_category_assigned_to_user_id, amount, date_of_income, income_comment)
                     VALUES (:user_id, :income_category_assigned_to_user_id, :amount, :date_of_income, :income_comment)';
 
@@ -45,19 +44,40 @@ class Incomes extends \Core\Model
 
         return false;
     }
-	
+		
 	public function copyNumberOfCategory($ID, $category)
 	{
-		$sql = "SELECT id FROM 	incomes_categories_assigned_to_users WHERE user_id = '$ID' AND name = '$category'";
+		if (empty($this->errors)) {
+			$sql = "SELECT id FROM 	incomes_categories_assigned_to_users WHERE user_id = '$ID' AND name = '$category'";
+			
+			$db = static::getDB();
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);		
+					
+			$col = implode(" ", $row);
+			return $col;
+		}
+		
+		return false;
+	}
+	
+	public static function categoriesAssignedToUser($ID)
+	{
+		$sql = "SELECT name FROM	incomes_categories_assigned_to_users WHERE user_id = '$ID'";
 		
 		$db = static::getDB();
         $stmt = $db->prepare($sql);
-		$stmt->execute();
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);		
+		$stmt->execute();		
 		
-		$col = implode(" ", $row);
-		return $col;
-	}
+		$tab = [];
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$temp = $row['name'];				
+			array_push($tab, "$temp");
+		}
+		
+		return $tab;
+	}	
 }
 
 ?>

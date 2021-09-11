@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 
-class Settings extends \Core\Controller
+class Settings extends Authenticated
 {
     public function showAction()
     {

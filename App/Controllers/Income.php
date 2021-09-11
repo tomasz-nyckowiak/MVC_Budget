@@ -4,12 +4,18 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\Incomes;
+use \App\Dates;
 
-class Income extends \Core\Controller
+class Income extends Authenticated
 {
     public function newAction()
     {
-        View::renderTemplate('Income/new.html');
+		$ID = $_SESSION['user_id'];
+		$categories = [];
+		
+		$categories['names'] = Incomes::categoriesAssignedToUser($ID);
+		$categories['today'] = Dates::currentDate();
+		View::renderTemplate('Income/new.html', $categories);		
     }
 	
 	public function addAction()
@@ -25,13 +31,11 @@ class Income extends \Core\Controller
             View::renderTemplate('Income/new.html', [
                 'income' => $income
             ]);
-
-        }        
+        }       
     }
 	
 	public function successAction()
     {
         View::renderTemplate('Income/success.html');
-    }
-	
+    }	
 }

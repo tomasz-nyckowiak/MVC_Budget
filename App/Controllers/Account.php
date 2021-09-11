@@ -4,19 +4,9 @@ namespace App\Controllers;
 
 use \App\Models\User;
 
-/**
- * Account controller
- *
- * PHP version 7.0
- */
 class Account extends \Core\Controller
 {
-
-  /**
-   * Validate if email is available (AJAX) for a new signup.
-   *
-   * @return void
-   */
+  //Validate if email is available (AJAX) for a new signup.
   public function validateEmailAction()
   {
     $is_valid = ! User::emailExists($_GET['email']);

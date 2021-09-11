@@ -4,23 +4,10 @@ namespace App;
 
 use App\Models\User;
 use App\Models\RememberedLogin;
-//use App\Models\Incomes;
 
-/**
- * Authentication
- *
- * PHP version 7.0
- */
 class Auth
-{
-    /**
-     * Login the user
-     *
-     * @param User $user The user model
-	 * @param boolean $remember_me Remember the login if true
-     *
-     * @return void
-     */
+{ 
+    //Login the user
     public static function login($user, $remember_me)
     {
         session_regenerate_id(true);
@@ -33,21 +20,16 @@ class Auth
 				
 				setcookie('remember_me', $user->remember_token, $user->expiry_timestamp, '/');
 			}
-
         }
     }
 
-    /**
-     * Logout the user
-     *
-     * @return void
-     */
+    //Logout the user
     public static function logout()
     {
-      // Unset all of the session variables
+      //Unset all of the session variables
       $_SESSION = [];
 
-      // Delete the session cookie
+      //Delete the session cookie
       if (ini_get('session.use_cookies')) {
           $params = session_get_cookie_params();
 
@@ -62,25 +44,25 @@ class Auth
           );
       }
 
-      // Finally destroy the session
+      //Finally destroy the session
       session_destroy();
 	  
 	  static::forgetLogin();
     }    
     
-	/* Remember the originally-requested page in the session*/	
+	//Remember the originally-requested page in the session
 	public static function rememberRequestedPage()
     {
         $_SESSION['return_to'] = $_SERVER['REQUEST_URI'];
     }
 	
-	/* Get the originally-requested page to return to after requiring login, or default to the homepage*/
+	//Get the originally-requested page to return to after requiring login, or default to the homepage
 	public static function getReturnToPage()
     {
         return $_SESSION['return_to'] ?? '/';
     }
 	
-	/* Get the current logged-in user, from the session or the remember-me cookie*/
+	//Get the current logged-in user, from the session or the remember-me cookie
 	public static function getUser()
     {
         if (isset($_SESSION['user_id'])) {
@@ -92,12 +74,8 @@ class Auth
             return static::loginFromRememberCookie();
         }
     }
-	
-	/**
-     * Login the user from a remembered login cookie
-     *
-     * @return mixed The user model if login cookie found; null otherwise
-     */
+
+    //Login the user from a remembered login cookie
     protected static function loginFromRememberCookie()
     {
         $cookie = $_COOKIE['remember_me'] ?? false;
@@ -116,12 +94,8 @@ class Auth
             }
         }
     }
-	
-	/**
-     * Forget the remembered login, if present
-     *
-     * @return void
-     */
+
+    //Forget the remembered login, if present
     protected static function forgetLogin()
     {
         $cookie = $_COOKIE['remember_me'] ?? false;
@@ -136,7 +110,7 @@ class Auth
 
             }
 
-            setcookie('remember_me', '', time() - 3600);  // set to expire in the past
+            setcookie('remember_me', '', time() - 3600);  //set to expire in the past
         }
     }	
 }

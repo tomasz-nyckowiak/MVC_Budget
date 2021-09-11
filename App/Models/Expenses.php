@@ -4,7 +4,6 @@ namespace App\Models;
 
 use PDO;
 
-//Expense model
 class Expenses extends \Core\Model
 {
 	public $errors = [];
@@ -51,28 +50,70 @@ class Expenses extends \Core\Model
 	
 	public function copyNumberOfCategory($ID, $category)
 	{
-		$sql = "SELECT id FROM 	expenses_categories_assigned_to_users WHERE user_id = '$ID' AND name = '$category'";
+		if (empty($this->errors)) {
+			$sql = "SELECT id FROM 	expenses_categories_assigned_to_users WHERE user_id = '$ID' AND name = '$category'";
+			
+			$db = static::getDB();
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);		
+			
+			$col = implode(" ", $row);
+			return $col;
+		}
 		
-		$db = static::getDB();
-        $stmt = $db->prepare($sql);
-		$stmt->execute();
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);		
-		
-		$col = implode(" ", $row);
-		return $col;
+		return false;
 	}
 	
 	public function copyNumberOfPaymentMethod($ID, $payment)
 	{
-		$sql = "SELECT id FROM 	payments_methods_assigned_to_users WHERE user_id = '$ID' AND name = '$payment'";
+		if (empty($this->errors)) {
+			$sql = "SELECT id FROM 	payments_methods_assigned_to_users WHERE user_id = '$ID' AND name = '$payment'";
+			
+			$db = static::getDB();
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);		
+			
+			$col = implode(" ", $row);
+			return $col;
+		}
+		
+		return false;
+	}
+	
+	public static function categoriesAssignedToUser($ID)
+	{		
+		$sql = "SELECT name FROM	expenses_categories_assigned_to_users WHERE user_id = '$ID'";
 		
 		$db = static::getDB();
-        $stmt = $db->prepare($sql);
-		$stmt->execute();
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);		
+		$stmt = $db->prepare($sql);
+		$stmt->execute();		
 		
-		$col = implode(" ", $row);
-		return $col;
+		$tab = [];
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$temp = $row['name'];				
+			array_push($tab, "$temp");
+		}
+		
+		return $tab;		
+	}
+	
+	public static function paymentsMethodsAssignedToUser($ID)
+	{		
+		$sql = "SELECT name FROM	payments_methods_assigned_to_users WHERE user_id = '$ID'";
+		
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->execute();		
+		
+		$tab = [];
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$temp = $row['name'];				
+			array_push($tab, "$temp");
+		}
+		
+		return $tab;
 	}
 }
 
