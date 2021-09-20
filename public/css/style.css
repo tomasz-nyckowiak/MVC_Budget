@@ -1,4 +1,12 @@
-.mainHeader
+body
+{
+	background-color: #2E8B57;
+	color: #C0C0C0;
+	font-family: 'Arimo', sans-serif;
+	font-size: 18px;
+}
+
+.title
 {	
 	height: 62px;	
 	font-size: 44px;
@@ -11,8 +19,478 @@
 	background-image: url("/img/what-the-hex-dark.png");
 }
 
-body
+.about
+{	
+	color: #2E8B57;
+	border-left: 2px solid #C0C0C0;
+	border-right: 2px solid #C0C0C0;
+	border-top: 2px solid #FFD700;
+	border-bottom: 2px solid #FFD700;	
+	background-image: url("/img/what-the-hex-dark.png");
+}
+
+.firstNav
+{	
+	font-size: 26px;
+	font-weight: 700;
+	letter-spacing: 1px;
+	border-top: 1px dashed #C0C0C0;
+}
+
+.row
 {
-	margin-top: 25px;
+	margin: 20px 10px;
+	padding-top: 10px;	
+}
+
+/*.onSite
+{	
+	text-shadow:
+	2px 2px 10px #FFD700,
+	-2px 2px 10px #FFD700,
+	-2px -2px 10px #FFD700,
+	2px -2px 10px #FFD700;
+}*/
+
+			/* LINKS */
+
+a:link
+{	
+	color: #C0C0C0;
+	text-decoration: none;
+}
+
+a:visited
+{
+	color: #C0C0C0;
+	text-decoration: none;
+}
+
+a:hover
+{
+	color: #FFD700;
+	text-decoration: underline;
+}
+
+a:active
+{
+	color: #C0C0C0;
+	text-decoration: none;
+}
+
+					/* FOOTER */
+
+.footer
+{	
+	font-size: 16px;	
+	letter-spacing: 2px;
+	background-image: url("/img/what-the-hex-dark.png");
+}
+
+					/* FORMS AND INPUTS */
+
+.inputs
+{	
+	font-size: 20px;
+	color: #2E8B57;
+	border-radius: 5px;	
+	background-image: url("/img/what-the-hex-dark.png");
+	box-shadow: 3px 3px 30px 5px rgba(255,215,0,0.9);
+}
+
+.customButton
+{
+	width: 400px;
 	background-color: #2E8B57;
+	font-size: 22px;
+	font-weight: 700;
+	color: white;
+	letter-spacing: 2px;
+}
+
+.customButton:hover
+{
+	background-color: #40bf77;
+	color: black;
+}
+
+form i
+{
+	float: right;
+	margin-top: -38px;
+	margin-right: 5px;
+	position: static;
+	z-index: 2;	
+    cursor: pointer;
+}
+
+input[type=text],
+input[type=email],
+input[type=password]
+{
+	width: 400px;
+	background-color: #C0C0C0;	
+	border: 2px solid #2E8B57;
+	border-radius: 5px;
+	font-size: 20px;
+	padding: 10px;
+	box-sizing: border-box;
+	outline: none;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+input[type=text]:focus,
+input[type=email]:focus,
+input[type=password]:focus
+{
+	box-shadow: 0px 0px 10px 2px rgba(255,215,0,0.9);
+	border: 2px solid #FFD700;
+	background-color: #40bf77;
+	color: black;
+}
+
+input[type=submit]
+{
+	width: 400px;
+	background-color: #2E8B57;
+	font-size: 22px;
+	font-weight: 700;
+	color: white;	
+	padding: 15px 15px;
+	margin-top: 50px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	letter-spacing: 2px;
+	outline: none;
+}
+
+input[type=submit]:focus
+{
+	box-shadow: 0px 0px 15px 5px rgba(255,215,0,0.9);
+}
+
+input[type=submit]:hover
+{
+	background-color: #40bf77;
+	color: black;
+}
+
+.errors
+{
+	color: red;
+}
+
+			/* MAIN NAVIGATION */
+
+.navMenu
+{
+	font-size: 20px;	
+	margin-left: auto;
+	margin-right: auto;
+	background-image: url("/img/what-the-hex-dark.png");
+}
+
+.navbar-dark .navbar-nav .nav-link:hover
+{
+	color: #FFD700;
+	text-decoration: underline;
+}
+
+.navbar-toggler
+{
+	margin-left: 20px;	
+}
+
+.greetings,
+.settings
+{
+	background-image: url("/img/what-the-hex-dark.png");	
+	box-shadow: 3px 3px 30px 5px rgba(255,215,0,0.9);
+}
+
+			/* STYLES FOR FORM (ADDING INCOMES AND EXPENSES) */
+
+.form
+{	
+	background-image: url("/img/what-the-hex-dark.png");
+}
+
+			/*STYLES FOR BALANCE */
+
+.choosingRange
+{
+	color: #C0C0C0;
+	letter-spacing: 1px;	
+	background-image: url("/img/what-the-hex-dark.png");	
+}
+
+.choosingRange:hover
+{
+	color: #FFD700;	
+}
+
+.dropdown-menu
+{
+	background-image: url("/img/what-the-hex-dark.png");
+}
+
+.dropdown-item
+{
+	color: #C0C0C0;
+}
+
+.dropdown-item:hover
+{	
+	background-color: #2E8B57;
+}
+
+.modal-header,
+.modal-footer
+{
+	background-color: #2E8B57;
+}
+
+.modal-title
+{
+	font-size: 18px;	
+}
+
+.modal-body
+{
+	background-image: url("/img/what-the-hex-dark.png");
+}
+
+h2
+{	
+	text-align: center;
+	letter-spacing: 2px;	
+	border-bottom: 2px dashed #C0C0C0;
+}
+
+.myTabs
+{
+	border-left: 1px solid #C0C0C0;
+	border-right: 1px solid #C0C0C0;
+	border-top: 1px solid #FFD700;
+	border-bottom: 1px solid #FFD700;
+	margin-left: 25px;
+	background-image: url("/img/what-the-hex-dark.png");	
+}
+
+ul > li:last-child
+{
+	margin-top: 20px;
+}
+
+.balance
+{	
+	border-left: 2px solid #FFD700;
+	border-right: 2px solid #FFD700;
+	border-top: 2px solid #FFD700;
+	border-bottom: 2px solid #FFD700;
+	background-image: url("/img/what-the-hex-dark.png");	
+}
+
+					/* MEDIA */
+
+@media (max-width: 768px)
+{
+	textarea
+	{
+		box-sizing: border-box;
+		max-width: 50%;
+	}
+}
+
+@media (max-width: 558px)
+{
+	input[type=submit]
+	{
+		width: 200px;
+		font-size: 18px;
+	}
+}
+
+@media (max-width: 576px)
+{	
+	ol > li
+	{			
+		margin: 10px 20px 0px 20px;		
+		border-bottom: 1px dashed #C0C0C0;
+	}
+	
+	input[name="submits"]
+	{
+		width: 230px;
+		font-size: 18px;
+	}	
+}
+
+@media (max-width: 500px)
+{
+	.inputs
+	{
+		font-size: 12px;
+	}
+	
+	input[type=text],
+	input[type=email],
+	input[type=password]	
+	{
+		width: 100px;		
+		font-size: 12px;		
+	}
+	
+	.customButton
+	{
+		width: 100px;		
+		font-size: 12px;
+		letter-spacing: normal;
+		font-weight: 400;		
+	}
+}
+
+@media (min-width:501px) and (max-width: 635px)
+{
+	.inputs
+	{
+		font-size: 16px;
+	}
+	
+	input[type=text],
+	input[type=email],
+	input[type=password]
+	{
+		width: 200px;		
+		font-size: 16px;		
+	}
+	
+	.customButton
+	{
+		width: 200px;		
+		font-size: 18px;
+		font-weight: 400;		
+		letter-spacing: normal;
+	}
+}
+
+@media (min-width: 636px) and (max-width: 768px)
+{
+	.inputs
+	{
+		font-size: 16px;
+	}
+	
+	input[type=text],
+	input[type=email],
+	input[type=password]
+	{
+		width: 300px;		
+		font-size: 16px;		
+	}
+	
+	.customButton
+	{
+		width: 300px;		
+		font-size: 18px;
+		font-weight: 400;		
+	}
+}
+
+@media (min-width: 577px) and (max-width: 768px)
+{
+	ol > li
+	{		
+		margin: 10px 20px 0px 20px;
+		border-bottom: 1px dashed #C0C0C0;
+	}	
+}
+
+@media (max-width: 740px)
+{
+	.h2
+	{
+		font-size: 24px;		
+	}
+}
+
+@media (max-width: 655px)
+{
+	.h2
+	{
+		font-size: 20px;
+		letter-spacing: normal;
+	}
+	
+	ul > li
+	{
+		font-size: 16px;		
+	}
+	
+	.summary
+	{
+		font-size: 16px;
+	}
+}
+
+@media (max-width: 780px)
+{
+	.footer
+	{		
+		font-size: 14px;
+		letter-spacing: normal;
+	}	
+}
+
+@media (min-width: 769px) and (max-width: 900px)
+{	
+	ol > li
+	{		
+		border-right: 1px dashed #C0C0C0;
+	}
+	
+	ol > li:last-child
+	{	
+		border: none;
+	}	
+}
+
+@media (min-width: 901px) and (max-width: 1400px)
+{
+	ol > li
+	{
+		float: left;		
+		border-right: 1px dashed #C0C0C0;
+	}
+	
+	ol > li:last-child
+	{	
+		border: none;
+	}	
+}
+
+@media (min-width: 1401px)
+{
+	ol
+	{	
+		height: 60px;
+		list-style-type: none;	
+		display: inline-block;	
+	}
+
+	ol > li
+	{
+		float: left;
+		width: 200px;
+		height: 50px;
+		margin-top: 5px;
+		border-right: 1px dashed #C0C0C0;
+	}
+
+	ol > li:first-child
+	{	
+		border-left: 1px dashed #C0C0C0;
+	}	
 }

@@ -3,52 +3,84 @@
 {% block title %}Add income{% endblock %}
 
 {% block body %}
+	
+	<div class="content">
+		<div class="row mt-5 form">
+			<form method="post" action="/income/add" id="formAddincome">
+				
+				<div class="row my-1 p-2">
+					<div class="col-auto">
+						<label for="inputAmount" class="col-form-label">Kwota: </label>
+					</div>
+					<div class="col-auto">
+						<input type="number" step="0.01" name="amount" id="inputAmount" class="form-control" required>
+					</div>
+				</div>
+				<div class="row my-1 p-2">
+					<div class="col-auto">
+						<label for="inputDate" class="col-form-label">Data: </label>
+					</div>
+					<div class="col-auto">
+						<input type="date" name="date" value="{{ today }}" id="inputDate" class="form-control" required>
+					</div>
+				</div>
+				
+				<div class="row my-1 p-2">
+					<div class="col-auto">
+						<fieldset>				
+							<legend class="col-form-label">Kategoria:</legend>						
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="{{ names[0] }}" checked>
+								<label class="form-check-label" for="gridRadios1">{{ names[0] }}</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="{{ names[1] }}">
+								<label class="form-check-label" for="gridRadios2">{{ names[1] }}</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="{{ names[2] }}">
+								<label class="form-check-label" for="gridRadios3">{{ names[2] }}</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="gridRadios" id="gridRadios4" value="{{ names[3] }}">
+								<label class="form-check-label" for="gridRadios4">{{ names[3] }}</label>
+							</div>						
+						</fieldset>
+					</div>
+				</div>
 
-    <form method="post" action="/income/add" id="formAddincome">
-		
-		<div>
-			<label for="inputAmount">Kwota: </label>
-            <input type="number" step="0.01" name="amount" id="inputAmount" required>
-		</div>
-		<div>
-			<label for="inputDate">Data: </label>
-            <input type="date" name="date" value="{{ today }}" id="inputDate" required>
-		</div>
-		
-		<fieldset>				
-			<legend>Kategoria:</legend>
-			<div>
-			  <div>
-				<input type="radio" name="gridRadios" id="gridRadios1" value="{{ names[0] }}" checked>
-				<label for="gridRadios1">{{ names[0] }}</label>
-			  </div>
-			  <div>
-				<input type="radio" name="gridRadios" id="gridRadios2" value="{{ names[1] }}">
-				<label for="gridRadios2">{{ names[1] }}</label>
-			  </div>
-			  <div>
-				<input type="radio" name="gridRadios" id="gridRadios3" value="{{ names[2] }}">
-				<label for="gridRadios3">{{ names[2] }}</label>
-			  </div>
-			  <div>
-				<input type="radio" name="gridRadios" id="gridRadios4" value="{{ names[3] }}">
-				<label for="gridRadios4">{{ names[3] }}</label>
-			  </div>
-			</div>
-		</fieldset>
-		
-		<div>
-			<label for="CommentForIncome">Komentarz (opcjonalnie):</label>
-			<textarea name="comment" id="CommentForIncome" rows="3" cols="60" minlength="10"></textarea>
-		</div>
-		
-		<div>			
-            <input type="submit" value="Dodaj przychód">
-		</div>
-		<div>			
-            <button type="button" name="cancel">Anuluj</button>
-		</div>
-		
-	</form>
+				
+				<div class="row my-1 p-2">
+					<div class="col-auto">
+						<label class="col-form-label" for="CommentForIncome">Komentarz (opcjonalnie):</label>
+						<textarea class="form-control" name="comment" id="CommentForIncome" rows="3" cols="60" minlength="10"></textarea>
+					</div>
+				</div>
+				
+				<div class="row my-1 p-2">			
+					<div class="col-auto">
+						<input type="submit" value="Dodaj przychód">
+					</div>
+				</div>
+				
+				<div class="row my-1 p-2">				
+					<div class="col-auto">
+						<input class="btn btn-outline-secondary" type="reset" value="Wyczyść">
+					</div>
+				</div>			
+				
+			</form>
+		</div>	
+	</div>	
 
+{% endblock %}
+
+{% block mainFooter %}
+	<footer>		
+		<div class="footer d-flex justify-content-center mt-5 mb-2 p-1">
+			<div class="col-auto">
+				Wszelkie prawa zastrzeżone &copy; 2021 | <i class="icon-mail"></i> tomasz.nyckowiak.programista@gmail.com
+			</div>			
+		</div>	
+	</footer>
 {% endblock %}

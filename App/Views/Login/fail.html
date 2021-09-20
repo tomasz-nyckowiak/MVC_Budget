@@ -20,6 +20,11 @@
 					<input type="password" id="inputPassword" name="password" placeholder="hasło" class="form-control" required>
 					<i class="far fa-eye" id="togglePassword"></i>
 				</div>
+				
+				<div class="row d-flex justify-content-center align-items-center">
+					<div style="color: red">Nieprawidłowy login lub hasło!</div>
+				</div>
+				
 				<div class="checkbox">
 					<label>
 						<input type="checkbox" name="remember_me" {% if remember_me %} checked="checked" {% endif %}> Pamiętaj mnie

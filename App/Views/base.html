@@ -16,28 +16,47 @@
 		<link rel="stylesheet" href="/css/fontello.css" type="text/css">
 		<link rel="stylesheet" href="/css/style.css" type="text/css">
 		<link rel="preconnect" href="https://fonts.gstatic.com">
-		<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">	
-		
-		
+		<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">		
 	</head>
-	<body>
+	
+	<body>		
+		<header>
+			<h1 class="title text-center text-uppercase mt-2 p-1">Budżetowiec</h1>
+		</header>
+			
 		<div class="container">
-			<header>
-				<h1 class="mainHeader">Budżetowiec</h1>
-					{% if current_user %}							
-						<p><a href="/income/new">Dodaj przychód</a>
-						<a href="/expense/new">Dodaj wydatek</a>
-						<a href="/balance/show">Przeglądaj bilans</a>
-						<a href="/settings/show">Ustawienia</a>
-						<a href="/logout">Wyloguj</a></p>			
-					{% endif %}
-			</header>
+			{% if current_user %}							
+				<nav class="navMenu navbar navbar-dark navbar-expand-md">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
+						<span class="navbar-toggler-icon"></span>
+					</button>			
+					<div class="collapse navbar-collapse" id="mainmenu">			
+						<ol class="navbar-nav text-sm-center mx-auto">
+							<li class="nav-item">
+								<a class="nav-link" href="/income/new"> Dodaj przychód </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/expense/new"> Dodaj wydatek </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/balance/show"> Przeglądaj bilans </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/settings/show"> Ustawienia </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/logout"> Wyloguj </a>
+							</li>
+						</ol>			
+					</div>		
+				</nav>		
+			{% endif %}			
 		
-			{% for message in flash_messages %}
+			<!--{% for message in flash_messages %}
 				<div class="alert alert-{{ message.type }}">
 					{{ message.body }}
 				</div>
-			{% endfor %}
+			{% endfor %}-->
 			
 			{% block body %}
 			{% endblock %}
@@ -49,5 +68,16 @@
 		
 		{% block footer %}
 		{% endblock %}
+		
+		{% block mainFooter %}
+			<footer class="fixed-bottom">		
+				<div class="footer d-flex justify-content-center mt-5 mb-2 p-1">
+					<div class="col-auto">
+						Wszelkie prawa zastrzeżone &copy; 2021 | <i class="icon-mail"></i> tomasz.nyckowiak.programista@gmail.com
+					</div>			
+				</div>	
+			</footer>
+		{% endblock %}
 	</body>
+	
 </html>

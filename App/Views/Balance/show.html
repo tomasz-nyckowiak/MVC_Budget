@@ -18,8 +18,12 @@
 			{% endfor %}
 		]);
 
-		var options = {
-		  title: 'Your expenses:'
+		var options = {		  
+		  width: 350,
+		  height: 350,
+		  chartArea:{left:20, top:20, width:'100%', height:'100%'},
+		  fontName: 'sans-serif',
+		  fontSize: 13		  
 		};
 
 		var chart = new google.visualization.PieChart(document.getElementById('chartContainer'));
@@ -49,103 +53,140 @@
 				document.getElementById("messageError").innerHTML="";				
 			}			
 		}
-	</script>
-	
-	
+	</script>	
 
 {% endblock %}
 
 {% block body %}
 
-    <h2>Bilans</h2>		
-		<div class="dropdown">
-			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Wybierz okres</button>
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					<form method="post">
-						<button class="dropdown-item" type="submit" name="selectedCM" onclick="location.href='Balance/show.html'">bieżący miesiąc</button>
-						<button class="dropdown-item" type="submit" name="selectedPM" onclick="location.href='Balance/show.html'">poprzedni miesiąc</button>
-						<button class="dropdown-item" type="submit" name="selectedCY" onclick="location.href='Balance/show.html'">bieżący rok</button>
-						<div class="dropdown-divider" style="border-color:#C0C0C0;"></div>
-						<button class="dropdown-item" type="button" data-toggle="modal" data-target="#myModal">niestandardowy</button>
-					</form>
-				</div>
-		</div>
-		
-		<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-				    <div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Wybierz własny zakres dat:</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						
-						<form id="modalForm" method="post">							
-							<label for="date1" class="col-form-label">Od:</label>
-							<input type="date" onchange="checkModalDates()" class="form-control" name="date1" id="date1" style="width:165px;" required>
-							
-							<label for="date2" class="col-form-label">do:</label>
-							<input type="date" onchange="checkModalDates()" class="form-control" name="date2" id="date2" style="width:165px;" required>
-													
-							<div id="messageError"></div>
-							<button type="submit" name="selectedCU" id="save" class="btn btn-primary" disabled>Zatwierdź</button>						
+    <div class="content">
+		<div class="row d-flex justify-content-end">		
+			<div class="dropdown">
+				<button class="btn btn-secondary choosingRange dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Wybierz okres</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<form method="post">
+							<button class="dropdown-item" type="submit" name="selectedCM" onclick="location.href='Balance/show.html'">bieżący miesiąc</button>
+							<button class="dropdown-item" type="submit" name="selectedPM" onclick="location.href='Balance/show.html'">poprzedni miesiąc</button>
+							<button class="dropdown-item" type="submit" name="selectedCY" onclick="location.href='Balance/show.html'">bieżący rok</button>
+							<div class="dropdown-divider" style="border-color:#C0C0C0;"></div>
+							<button class="dropdown-item" type="button" data-toggle="modal" data-target="#myModal">niestandardowy</button>
 						</form>
-						
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetModal()">Zamknij</button>
+			</div>
+		</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Wybierz własny zakres dat:</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">							
+							<form id="modalForm" method="post">							
+								<div class="row d-flex justify-content-center align-items-center">
+									<div class="col-auto">
+										<label for="date1" class="col-form-label">Od:</label>
+									</div>
+									<div class="col-auto">
+										<input type="date" onchange="checkModalDates()" class="form-control" name="date1" id="date1" style="width:165px;" required>
+									</div>
+								</div>
+								<div class="row d-flex justify-content-center align-items-center">
+									<div class="col-auto">
+										<label for="date2" class="col-form-label">do:</label>
+									</div>
+									<div class="col-auto">
+										<input type="date" onchange="checkModalDates()" class="form-control" name="date2" id="date2" style="width:165px;" required>
+									</div>
+								</div>						
+								
+								<div class="row d-flex justify-content-center align-items-center">
+									<div id="messageError" style="color: red"></div>
+								</div>
+								
+								<div class="row d-flex justify-content-end align-items-center">
+									<button type="submit" name="selectedCU" id="save" class="btn btn-primary" disabled>Zatwierdź</button>
+								</div>						
+							</form>							
+						</div>
+						<div class="modal-footer justify-content-center">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetModal()">Zamknij</button>
+						</div>
 					</div>
 				</div>
 			</div>
+			<!-- End of modal -->
+			
+			<div class="row d-flex justify-content-center">
+				<div class="col-sm-6">			
+					<p style="text-align: center; background-image: url('/img/what-the-hex-dark.png');">Okres od {{ message.first_date }} do {{ message.second_date }}</p>
+				</div>
+			</div>
+			
+		<div class="row d-flex justify-content-center gx-5 gy-3">
+			<div class="col-auto myTabs">	
+				<h2 class="h2 my-3"><span style="color: green">Przychody</span></h2>
+				<ul class="list-unstyled p-1 float-left">
+					{% for income in incomes %}			
+						<li>{{ income.category }} : {{ income.amount }}</li>			
+					{% endfor %}		
+					{% for sum in finalSums %}			
+						{% if sum.totalIncomes == 0 %}
+							<p>Brak przychodów!</p>
+						{% else %}
+							<li>Suma : {{ sum.totalIncomes }}</li>
+						{% endif %}				
+					{% endfor %}
+				</ul>
+			</div>
+				
+			<div class="col-auto myTabs">
+				<h2 class="h2 my-3"><span style="color: #e60000">Wydatki</span></h2>
+				<ul class="list-unstyled p-1 float-left">
+					{% for expense in expenses %}			
+						<li>{{ expense.category }} : {{ expense.amount }}</li>			
+					{% endfor %}
+					{% for sum in finalSums %}			
+						{% if sum.totalExpenses == 0 %}
+							<p>Brak wydatków!</p>
+						{% else %}
+							<li>Suma : {{ sum.totalExpenses }}</li>
+						{% endif %}						
+					{% endfor %}
+				</ul>
+			</div>
+			
+			<div class="col-auto">
+				<div id="chartContainer"></div>
+			</div>
 		</div>
-		<!-- End of modal -->
 		
-		<div class="tekst">			
-			<p>Okres od {{ message.first_date }} do {{ message.second_date }}</p>	
-		</div>
-		
-	<h3>Przychody</h3>	
-	<ul>
-		{% for income in incomes %}			
-			<li>{{ income.category }} : {{ income.amount }}</li>			
-		{% endfor %}		
-		{% for sum in finalSums %}			
-			{% if sum.totalIncomes == 0 %}
-				<p>Brak przychodów!</p>
-			{% else %}
-				<li>Suma : {{ sum.totalIncomes }}</li>
-			{% endif %}				
-		{% endfor %}
-	</ul>
-	
-	<h3>Wydatki</h3>	
-	<ul>
-		{% for expense in expenses %}			
-			<li>{{ expense.category }} : {{ expense.amount }}</li>			
-		{% endfor %}
-		{% for sum in finalSums %}			
-			{% if sum.totalExpenses == 0 %}
-				<p>Brak wydatków!</p>
-			{% else %}
-				<li>Suma : {{ sum.totalExpenses }}</li>
-			{% endif %}						
-		{% endfor %}
-	</ul>
-	
-	<h3>Wykres</h3>
-	<div id="chartContainer" style="height: 350px; width: 350px;"></div>
-	
-	<h3>Bilans końcowy</h3>		
-			{% for sum in finalSums %}			
-				{% if sum.totalIncomes == 0 and sum.totalExpenses == 0 %}
-					<p>Brak przychodów i wydatków!</p>
-				{% else %}
-					{{ sum.total }} <br />
-					{{ sum.message }}
-				{% endif %}
-			{% endfor %}			
+		<div class="row d-flex justify-content-center mt-5 p-1">		
+			<div class="col-auto balance p-1 text-center">
+				<h2 class="h2 my-3"><span style="color: #FFD700">Bilans końcowy</span></h2>
+				{% for sum in finalSums %}			
+					{% if sum.totalIncomes == 0 and sum.totalExpenses == 0 %}
+						<p>Brak przychodów i wydatków!</p>
+					{% else %}
+						{{ sum.total }} <br />
+						{{ sum.message }}
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>	
+	</div>
+{% endblock %}
 
+{% block mainFooter %}
+	<footer>		
+		<div class="footer d-flex justify-content-center mt-5 mb-2 p-1">
+			<div class="col-auto">
+				Wszelkie prawa zastrzeżone &copy; 2021 | <i class="icon-mail"></i> tomasz.nyckowiak.programista@gmail.com
+			</div>			
+		</div>	
+	</footer>
 {% endblock %}

@@ -24,17 +24,13 @@ class Login extends \Core\Controller
 
         if ($user) {
 
-            Auth::login($user, $remember_me);						
-
-			Flash::addMessage('Login successful');			
+            Auth::login($user, $remember_me);					
 			
 			$this->redirect(Auth::getReturnToPage());
 
-        } else {
-
-            Flash::addMessage('Login unsuccessful, please try again', Flash::WARNING);
+        } else {            
 			
-			View::renderTemplate('Login/new.html', ['email' => $_POST['email'], 'remember_me' => $remember_me]);			
+			View::renderTemplate('Login/fail.html', ['email' => $_POST['email'], 'remember_me' => $remember_me]);			
         }
     }
 

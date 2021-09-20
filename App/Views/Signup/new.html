@@ -3,96 +3,103 @@
 {% block title %}Sign up{% endblock %}
 
 {% block footer %}
-    <script src="/js/showHide.js"></script>
+    <script src="/js/hideShowPassword.js"></script>
     <script src="https://www.google.com/recaptcha/api.js"></script>
-
-    <script>
-        /*Add jQuery Validation plugin method for a valid password
-        Valid passwords contain at least one letter and one number*/
-        $.validator.addMethod('validPassword',
-            function(value, element, param) {
-
-                if (value != '') {
-                    if (value.match(/.*[a-z]+.*/i) == null) {
-                        return false;
-                    }
-                    if (value.match(/.*\d+.*/) == null) {
-                        return false;
-                    }
-                }
-
-                return true;
-            },
-            'Must contain at least one letter and one number'
-        );
-
-        $(document).ready(function() {
-
-            //Validate the form
-            $('#formSignup').validate({
-                rules: {
-                    name: 'required',
-                    email: {
-                        required: true,
-                        email: true,
-                        remote: '/account/validate-email'
-                    },
-                    password: {
-                        required: true,
-                        minlength: 6,
-                        validPassword: true
-                    }
-                },
-                messages: {
-                    email: {
-                        remote: 'email already taken'
-                    }
-                }
-            });
-        });
-    </script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">    	
 
 {% endblock %}
 
 {% block body %}
 
-    <h2>Rejestracja</h2>
-
-    {% if user.errors is not empty %}
-        <p>Errors:</p>
-        <ul>
-            {% for error in user.errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
+    {% if user.errors is not empty %}			
+		{% set err_n = "" %}
+		{% set err_e = "" %}
+		{% set err_p = "" %}
+		{% set err_t = "" %}
+		{% set err_b = "" %}
+		{% for key, error in user.errors %}
+			{% if key == 'name' %}
+				{% set err_n = error %}
+			{% endif %}
+			{% if key == 'email' %}
+				{% set err_e = error %}
+			{% endif %}
+			{% if key == 'pass' %}
+				{% set err_p = error %}
+			{% endif %}
+			{% if key == 'terms' %}
+				{% set err_t = error %}
+			{% endif %}
+			{% if key == 'bot' %}
+				{% set err_b = error %}
+			{% endif %}
+		{% endfor %}
     {% endif %}
 
-    <form method="post" action="/signup/create" id="formSignup">
+	<div class="content">
+		<div class="row d-flex justify-content-center">
+			<div class="col-auto">
+				<form method="post" action="/signup/create" id="formSignup" class="inputs p-5">
 
-        <div class="form-group">
-            <label for="inputName">Imię: </label>
-            <input id="inputName" name="name" placeholder="Name" autofocus value="{{ user.name }}" required class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="inputEmail">Adres e-mail:</label>
-            <input id="inputEmail" name="email" placeholder="email address" value="{{ user.email }}" required type="email" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="inputPassword">Hasło:</label>
-            <input type="password" id="inputPassword" class="active" name="password" placeholder="Password" required class="form-control">
-			<i id="icon" class="fa fa-eye-slash"></i>
-        </div>
-		<div class="form-group">
-			<label>
-				<input type="checkbox" name="terms">Akceptuję regulamin
-			</label>
+					<div class="row mb-3">
+						<label for="inputName" class="col-sm-2 col-form-label-lg mt-1">Imię:</label>
+						<div class="col-auto">
+							<input type="text" id="inputName" name="name" placeholder="Name" autofocus value="{{ user.name }}" class="form-control" required>
+						</div>							
+					</div>
+					
+					<div class="row d-flex justify-content-center errors">{{ err_n }}</div>
+					
+					<div class="row mb-3">
+						<label for="inputEmail" class="col-sm-2 col-form-label-lg mt-1">Email:</label>
+						<div class="col-auto">
+							<input type="email" id="inputEmail" name="email" placeholder="Email address" value="{{ user.email }}" type="email" class="form-control" required>
+						</div>
+					</div>
+					
+					<div class="row d-flex justify-content-center errors">{{ err_e }}</div>
+					
+					<div class="row mb-3">
+						<label for="inputPassword" class="col-sm-2 col-form-label-lg mt-1">Hasło:</label>
+						<div class="col-auto">
+							<input type="password" id="inputPassword" name="password" placeholder="Password" class="form-control" required>
+							<i class="far fa-eye" id="togglePassword"></i>
+						</div>					
+					</div>
+					
+					<div class="row d-flex justify-content-center errors">{{ err_p }}</div>
+					
+					<div class="row d-flex justify-content-center mb-3">
+						<label>
+							<input type="checkbox" name="terms"> Akceptuję regulamin
+						</label>
+					</div>
+					
+					<div class="row d-flex justify-content-center errors">{{ err_t }}</div>
+					
+					<div class="row d-flex justify-content-center mb-2">
+						<div class="g-recaptcha" data-sitekey="6LcFQAwbAAAAABDEIdPwu5QWsJGYuGXtNXVyS4qa"></div>					
+					</div>
+					
+					<div class="row d-flex justify-content-center errors">{{ err_b }}</div>
+
+					<div class="row d-flex justify-content-center mb-2">
+						<button type="submit" class="btn customButton mt-5 p-3">Zarejestruj się</button>
+					</div>				
+
+				</form>
+			</div>
 		</div>
-		<div class="form-group">
-			<div class="g-recaptcha" data-sitekey="6LcFQAwbAAAAABDEIdPwu5QWsJGYuGXtNXVyS4qa"></div>
-		</div>
+	</div>
 
-        <button type="submit">Zarejestruj się</button>
+{% endblock %}
 
-    </form>
-
+{% block mainFooter %}
+	<footer>		
+		<div class="footer d-flex justify-content-center mt-5 mb-2 p-1">
+			<div class="col-auto">
+				Wszelkie prawa zastrzeżone &copy; 2021 | <i class="icon-mail"></i> tomasz.nyckowiak.programista@gmail.com
+			</div>			
+		</div>	
+	</footer>
 {% endblock %}

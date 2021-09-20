@@ -53,31 +53,50 @@ class User extends \Core\Model
     //Validate current property values, adding valiation error messages to the errors array property
     public function validate()
     {
-        //Name
-        if ($this->name == '') {
-            $this->errors[] = 'Name is required';
-        }
+        //Name		
+		if ((strlen($this->name)<3) || (strlen($this->name)>20))
+		{			
+			$this->errors['name'] = "Imię musi posiadać od 3 do 20 znaków!";
+		}
 
-        //email address
+        //Email address
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
-            $this->errors[] = 'Invalid email';
+            $this->errors['email'] = 'Podaj poprawny adres e-mail!';
         }
         if (static::emailExists($this->email)) {
-            $this->errors[] = 'email already taken';
+            $this->errors['email'] = 'Istnieje już konto przypisane do tego adresu e-mail!';
         }
 
         //Password
         if (strlen($this->password) < 6) {
-            $this->errors[] = 'Please enter at least 6 characters for the password';
+            $this->errors['pass'] = 'Hasło musi posiadać co najmniej 6 znaków!';
         }
 
         if (preg_match('/.*[a-z]+.*/i', $this->password) == 0) {
-            $this->errors[] = 'Password needs at least one letter';
+            $this->errors['pass'] = 'Hasło musi posiadać przynajmniej 1 literę!';
         }
 
         if (preg_match('/.*\d+.*/i', $this->password) == 0) {
-            $this->errors[] = 'Password needs at least one number';
+            $this->errors['pass'] = 'Hasło musi posiadać przynajmniej 1 cyfrę!';
         }
+		
+		//Terms
+		if (!isset($_POST['terms']))
+		{			
+			$this->errors['terms'] = "Potwierdź akceptację regulaminu!";
+		}
+		
+		//Are you a Bot?
+		$secret = "6LcFQAwbAAAAAD9wtOzdbsrunzal86gaEamM9l8a";
+		
+		$check = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+		
+		$response = json_decode($check);
+		
+		if ($response->success==false)
+		{			
+			$this->errors['bot'] = "Potwierdź, że nie jesteś botem!";
+		}		
     }
 
     //See if a user record already exists with the specified email

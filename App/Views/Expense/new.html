@@ -4,111 +4,146 @@
 
 {% block body %}
 
-    <form method="post" action="/expense/add" id="formAddexpense">
-		
-		<div>
-			<label for="inputAmount">Kwota: </label>
-            <input type="number" step="0.01" name="amount" id="inputAmount" required>
+    <div class="content">
+		<div class="row mt-5 form">
+			<form method="post" action="/expense/add" id="formAddexpense">
+				
+				<div class="row my-1 p-2">
+					<div class="col-auto">
+						<label for="inputAmount" class="col-form-label">Kwota: </label>
+					</div>
+					<div class="col-auto">
+						<input type="number" step="0.01" name="amount" id="inputAmount" class="form-control" required>
+					</div>
+				</div>
+				<div class="row my-1 p-2">
+					<div class="col-auto">
+						<label for="inputDate" class="col-form-label">Data: </label>
+					</div>
+					<div class="col-auto">
+						<input type="date" name="date" value="{{ today }}" id="inputDate" class="form-control" required>
+					</div>
+				</div>
+				<div class="row my-1 p-2">
+					<div class="col-auto">
+						<label for="payments" class="col-form-label">Sposób płatności:</label>
+					</div>			
+					<div class="col-auto">
+						<select class="custom-select" id="payments" name="paymentsMethods" aria-label="Sposób płatności">
+							<option name="paymentOptions" value="{{ payments[0] }}">{{ payments[0] }}</option>
+							<option name="paymentOptions" value="{{ payments[1] }}">{{ payments[1] }}</option>
+							<option name="paymentOptions" value="{{ payments[2] }}">{{ payments[2] }}</option>
+						</select>					
+					</div>		
+				</div>				
+					
+				<div class="row my-1 p-2">
+					<fieldset>				
+						<legend class="col-form-label ml-3">Kategoria:</legend>
+						<div class="col-auto">
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="{{ names[0] }}">
+								<label class="form-check-label" for="inlineRadio1">{{ names[0] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="{{ names[1] }}">
+								<label class="form-check-label" for="inlineRadio2">{{ names[1] }}</label>
+							</div>	
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="{{ names[2] }}">
+								<label class="form-check-label" for="inlineRadio3">{{ names[2] }}</label>
+							</div>	
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="{{ names[3] }}">
+								<label class="form-check-label" for="inlineRadio4">{{ names[3] }}</label>
+							</div>		
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="{{ names[4] }}">
+								<label class="form-check-label" for="inlineRadio5">{{ names[4] }}</label>
+							</div>	
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio6" value="{{ names[5] }}">
+								<label class="form-check-label" for="inlineRadio6">{{ names[5] }}</label>
+							</div>	
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio7" value="{{ names[6] }}">
+								<label class="form-check-label" for="inlineRadio7">{{ names[6] }}</label>
+							</div>	
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio8" value="{{ names[7] }}">
+								<label class="form-check-label" for="inlineRadio8">{{ names[7] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio8" value="{{ names[8] }}">
+								<label class="form-check-label" for="inlineRadio9">{{ names[8] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio10" value="{{ names[9] }}">
+								<label class="form-check-label" for="inlineRadio10">{{ names[9] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio11" value="{{ names[10] }}">
+								<label class="form-check-label" for="inlineRadio11">{{ names[10] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio12" value="{{ names[11] }}">
+								<label class="form-check-label" for="inlineRadio12">{{ names[11] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio13" value="{{ names[12] }}">
+								<label class="form-check-label" for="inlineRadio13">{{ names[12] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio14" value="{{ names[13] }}">
+								<label class="form-check-label" for="inlineRadio14">{{ names[13] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio15" value="{{ names[14] }}">
+								<label class="form-check-label" for="inlineRadio15">{{ names[14] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio16" value="{{ names[15] }}">
+								<label class="form-check-label" for="inlineRadio16">{{ names[15] }}</label>
+							</div>
+							<div class="form-check form-check-inline">								
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio17" value="{{ names[16] }}">
+								<label class="form-check-label" for="inlineRadio17">{{ names[16] }}</label>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				
+				<div class="row my-1 p-2">
+					<div class="col-auto">
+						<label for="CommentForExpense" class="col-form-label">Komentarz (opcjonalnie):</label>
+						<textarea class="form-control" name="comment" id="CommentForExpense" rows="3" cols="60" minlength="10"></textarea>
+					</div>
+				</div>
+				
+				<div class="row my-1 p-2">			
+					<div class="col-auto">
+						<input type="submit" value="Dodaj wydatek">
+					</div>
+				</div>
+				
+				<div class="row my-1 p-2">			
+					<div class="col-auto">
+						<input class="btn btn-outline-secondary" type="reset" value="Wyczyść">
+					</div>				
+				</div>
+				
+			</form>
 		</div>
-		<div>
-			<label for="inputDate">Data: </label>
-            <input type="date" name="date" value="{{ today }}" id="inputDate" required>
-		</div>
-		<div>
-			<label for="payments">Sposób płatności:</label>		
-			<select id="payments" name="paymentsMethods" aria-label="Sposób płatności">
-				<option name="paymentOptions" value="{{ payments[0] }}">{{ payments[0] }}</option>
-				<option name="paymentOptions" value="{{ payments[1] }}">{{ payments[1] }}</option>
-				<option name="paymentOptions" value="{{ payments[2] }}">{{ payments[2] }}</option>
-			</select>							
-		</div>
-		
-		<fieldset>				
-			<legend>Kategoria:</legend>
-			<div>
-			  <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="{{ names[0] }}">
-				<label for="inlineRadio1">{{ names[0] }}</label>
-			  </div>
-			  <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="{{ names[1] }}">
-				<label for="inlineRadio2">{{ names[1] }}</label>
-			  </div>
-			  <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="{{ names[2] }}">
-				<label for="inlineRadio3">{{ names[2] }}</label>
-			  </div>
-			  <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="{{ names[3] }}">
-				<label for="inlineRadio4">{{ names[3] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="{{ names[4] }}">
-				<label for="inlineRadio5">{{ names[4] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio6" value="{{ names[5] }}">
-				<label for="inlineRadio6">{{ names[5] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio7" value="{{ names[6] }}">
-				<label for="inlineRadio7">{{ names[6] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio8" value="{{ names[7] }}">
-				<label for="inlineRadio8">{{ names[7] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio9" value="{{ names[8] }}">
-				<label for="inlineRadio9">{{ names[8] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio10" value="{{ names[9] }}">
-				<label for="inlineRadio10">{{ names[9] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio11" value="{{ names[10] }}">
-				<label for="inlineRadio11">{{ names[10] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio12" value="{{ names[11] }}">
-				<label for="inlineRadio12">{{ names[11] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio13" value="{{ names[12] }}">
-				<label for="inlineRadio13">{{ names[12] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio14" value="{{ names[13] }}">
-				<label for="inlineRadio14">{{ names[13] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio15" value="{{ names[14] }}">
-				<label for="inlineRadio15">{{ names[14] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio16" value="{{ names[15] }}">
-				<label for="inlineRadio16">{{ names[15] }}</label>
-			  </div>
-			   <div>
-				<input type="radio" name="inlineRadioOptions" id="inlineRadio17" value="{{ names[16] }}">
-				<label for="inlineRadio17">{{ names[16] }}</label>
-			  </div>
-			</div>
-		</fieldset>
-		
-		<div>
-			<label for="CommentForExpense">Komentarz (opcjonalnie):</label>
-			<textarea name="comment" id="CommentForExpense" rows="3" cols="60" minlength="10"></textarea>
-		</div>
-		
-		<div>			
-            <input type="submit" value="Dodaj wydatek">
-		</div>
-		<div>			
-            <input type="reset" value="Wyczyść">
-		</div>
-		
-	</form>
+	</div>
 
+{% endblock %}
+
+{% block mainFooter %}
+	<footer>		
+		<div class="footer d-flex justify-content-center mt-5 mb-2 p-1">
+			<div class="col-auto">
+				Wszelkie prawa zastrzeżone &copy; 2021 | <i class="icon-mail"></i> tomasz.nyckowiak.programista@gmail.com
+			</div>			
+		</div>	
+	</footer>
 {% endblock %}

@@ -4,7 +4,14 @@
 
 {% block body %}
 
-    <p>Dziękujemy za rejestrację w serwisie!<br /><br />
-	<a href="/login/new">Zaloguj się na swoje konto!</a></p>
+    <div class="row">
+		<div class="col-auto">
+			<div class="settings p-2">
+				<p>Dziękujemy za rejestrację w serwisie!</p><br />
+				<p>Na podany adres wysłano link aktywacyjny!</p>				
+				<p>Potwierdź e-mail i <a href="/login/new">zaloguj się na swoje konto!</a></p>
+			</div>
+		</div>
+	</div>
 
 {% endblock %}
