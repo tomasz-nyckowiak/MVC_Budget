@@ -16,10 +16,10 @@ class Balance extends Authenticated
 		$arguments = [];
 		
 		$arguments['message'] = Dates::showMessage();
-		$arguments['incomes'] = $balance->IncomesFinalStep($ID);
-		$arguments['expenses'] = $balance->ExpensesFinalStep($ID);				
+		$arguments['incomes'] = $balance->getIncomes($ID);
+		$arguments['expenses'] = $balance->getExpenses($ID);
+		$arguments['finalSums'] = $balance->totalAmounts($ID);			
 		$arguments['pieChart'] = $balance->chart($ID);
-		$arguments['finalSums'] = $balance->totalAmounts($ID);
 		
 		View::renderTemplate('Balance/show.html', $arguments);
     }

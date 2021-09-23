@@ -8,13 +8,13 @@ class Config
     const DB_HOST = 'localhost';
 
     //Database name
-    const DB_NAME = 'mvcbudget';
+    const DB_NAME = 'tomaszny_mvchomebudget';
 
     //Database user
-    const DB_USER = 'mvcuser';
+    const DB_USER = 'tomaszny_HomeBudgetAdmin';
 
     //Database password
-    const DB_PASSWORD = 'secret123';
+    const DB_PASSWORD = 'K0miksyS0mTHEb3st';
 
     //Show or hide error messages on screen
     const SHOW_ERRORS = true;

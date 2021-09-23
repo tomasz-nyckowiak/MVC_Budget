@@ -6,390 +6,130 @@ use PDO;
 use \App\Dates;
 
 class Balancesheet extends \Core\Model
-{
-	public $errors = [];
+{	
+	//Wyliczamy sumy kwot dla wszystkich kategorii przychodów dla zadanego okresu czasu
+	public function getIncomes($user_id)
+	{		
+		$dates = [];
+		$dates = Dates::showMessage();
 		
-	public function __construct($data = [])
-	{
-		foreach ($data as $key => $value) {
-			$this->$key = $value;
-		};
+		$tab = [];
+		foreach ($dates as $key => $value) {			
+			array_push($tab, "$value");			
+		}
+				
+		$date_one = $tab[0];
+		$date_two = $tab[1];
+		
+		$sql = "SELECT incomes.income_category_assigned_to_user_id AS number, SUM(incomes.amount) AS sum, incomes_categories_assigned_to_users.name FROM incomes, incomes_categories_assigned_to_users WHERE incomes.date_of_income BETWEEN '$date_one' AND '$date_two' AND incomes.user_id = '$user_id' AND incomes.user_id = incomes_categories_assigned_to_users.user_id AND incomes.income_category_assigned_to_user_id = incomes_categories_assigned_to_users.id GROUP BY incomes.income_category_assigned_to_user_id";					
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
+		
+		$incomes = $stmt->fetchAll();
+		
+		return $incomes;
 	}	
-	
-	//Przychody / INCOMES
-	
-	//Wyciągamy kategorie przychodów i odpowiadające im numery id dla danego użytkownika i wstawiamy do osobnych tablic
-	public function IncomesStep1($user_id)
-	{
-		if (empty($this->errors)) {
-			$sql = "SELECT id, name FROM incomes_categories_assigned_to_users WHERE user_id = '$user_id'";					
 
-			$db = static::getDB();
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-			
-			$i = 0;		
-			$incomes_array = [];	
-			$tab_id_incomes = [];
-			$incomes_categories = [];			
-			
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-							
-				$incomes_array[$i]['id'] = $row['id'];
-				$incomes_array[$i]['name'] = $row['name'];
-				$temp_id_inc = $incomes_array[$i]['id'];
-				$temp_incomes = $incomes_array[$i]['name'];
-				array_push($tab_id_incomes, "$temp_id_inc");
-				array_push($incomes_categories, "$temp_incomes");
-				$i++;
-			}		
-			
-			return array($tab_id_incomes, $incomes_categories);
-		}
+	//Wyliczamy sumy kwot dla wszystkich kategorii wydatków dla zadanego okresu czasu
+	public function getExpenses($user_id)
+	{		
+		$dates = [];
+		$dates = Dates::showMessage();
 		
-		return false;
-	}
-	
-	//Zwrócenie tablicy numerów id, odpowiadających danej kategorii przychodów (jeśli znajdują się w tabeli) dla danego użytkownika z tabeli "przychody"
-	public function IncomesStep2($user_id)
-	{
-		if (empty($this->errors)) {
-			$sql = "SELECT DISTINCT income_category_assigned_to_user_id FROM incomes WHERE user_id = '$user_id' GROUP BY income_category_assigned_to_user_id";					
+		$tab = [];
+		foreach ($dates as $key => $value) {			
+			array_push($tab, "$value");			
+		}
+				
+		$date_one = $tab[0];
+		$date_two = $tab[1];
+		
+		$sql = "SELECT expenses.expense_category_assigned_to_user_id AS number, SUM(expenses.amount) AS sum, expenses_categories_assigned_to_users.name FROM expenses, expenses_categories_assigned_to_users WHERE expenses.date_of_expense BETWEEN '$date_one' AND '$date_two' AND expenses.user_id = '$user_id' AND expenses.user_id = expenses_categories_assigned_to_users.user_id AND expenses.expense_category_assigned_to_user_id = expenses_categories_assigned_to_users.id GROUP BY expenses.expense_category_assigned_to_user_id";					
 
-			$db = static::getDB();
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-			
-			$existing_numbers_id_of_categories_in_incomes = array();
-			
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-				$id_number_of_income_category = $row['income_category_assigned_to_user_id'];
-				array_push($existing_numbers_id_of_categories_in_incomes, "$id_number_of_income_category");			
-			}
-			
-			return $existing_numbers_id_of_categories_in_incomes;
-		}
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
 		
-		return false;
-	}
-	
-	//Wyliczamy sumy kwot dla wszystkich kategorii przychodów dla zadanego okresu czasu i wstawiamy do tablicy
-	public function IncomesStep3($user_id)
-	{
-		if (empty($this->errors)) {
-			$dates = [];
-			$dates = Dates::showMessage();
-			
-			$tab = [];
-			foreach ($dates as $key => $value) {			
-				array_push($tab, "$value");			
-			}
-					
-			$date_one = $tab[0];
-			$date_two = $tab[1];
-			
-			$sql = "SELECT income_category_assigned_to_user_id, SUM(amount) AS sum FROM incomes WHERE date_of_income BETWEEN '$date_one' AND '$date_two' AND user_id = '$user_id' GROUP BY income_category_assigned_to_user_id";					
-
-			$db = static::getDB();
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-			
-			$sums_of_incomes_categories = [];		
-			
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {				
-				$temp_sum_incomes = $row['sum'];			
-				array_push($sums_of_incomes_categories, "$temp_sum_incomes");			
-			}
-			
-			return $sums_of_incomes_categories;
-		}
+		$expenses = $stmt->fetchAll();
 		
-		return false;
-	}
-	
-	//Jeśli kategoria (jej nr id) znajduje się w tablicy "przychody", to odpowiadająca numerowi id kwota zostanie wyciągnięta z tablicy sum i przypisana do nowej zmiennej, a następnie wstawiona do finalnej tablicy; jeśli jej nie ma, to przypisujemy jej wartość 0
-	public function IncomesFinalStep($user_id)
-	{	
-		if (empty($this->errors)) {
-			$incomes_array = [];		
-			$incomes_array = Balancesheet::IncomesStep1($user_id);
-			list($firstArray, $secondArray) = $incomes_array;
-			
-			$tab_size_incomes = count($firstArray);
-			$incomes_id_for_categories = [];
-			$incomes_categories = [];
-			
-			foreach ($firstArray as $key => $value) {			
-				array_push($incomes_id_for_categories, "$value");			
-			}
-			
-			foreach ($secondArray as $key => $value) {			
-				array_push($incomes_categories, "$value");			
-			}
-					
-			$existing_numbers_id_of_categories_in_incomes = [];		
-			$existing_numbers_id_of_categories_in_incomes = Balancesheet::IncomesStep2($user_id);		
-			
-			$sums_of_incomes_categories = [];		
-			$sums_of_incomes_categories = Balancesheet::IncomesStep3($user_id);
-					
-			$tab_incomes = [];
-			
-			for ($x = 0; $x < $tab_size_incomes; $x++) {				
-				if (in_array("$incomes_id_for_categories[$x]",  $existing_numbers_id_of_categories_in_incomes)) {
-					$pulled_out_amount_inc = array_shift($sums_of_incomes_categories);
-					if (is_null($pulled_out_amount_inc)) $pulled_out_amount_inc = 0;
-					$tab_incomes[$x] = $pulled_out_amount_inc;
-				}
-				else $tab_incomes[$x] = 0;				
-			}
-			
-			$final_tab_for_incomes = [];
-			
-			for ($x = 0; $x < $tab_size_incomes; $x++) {				
-				if ($tab_incomes[$x] != 0) {
-					$income['category'] = $incomes_categories[$x];
-					$income['amount'] = $tab_incomes[$x];
-					$final_tab_for_incomes[] = $income;																				
-				}				
-			}		
-			
-			return $final_tab_for_incomes;
-		}
-		
-		return false;
-	}	
-	
-	//Wydatki / EXPENSES
-	
-	//Wyciągamy kategorie wydatków i odpowiadające im numery id dla danego użytkownika i wstawiamy do osobnych tablic
-	public function ExpensesStep1($user_id)
-	{
-		if (empty($this->errors)) {
-			$sql = "SELECT id, name FROM expenses_categories_assigned_to_users WHERE user_id = '$user_id'";					
-
-			$db = static::getDB();
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-			
-			$i = 0;		
-			$expenses_array = [];	
-			$tab_id_expenses = [];
-			$expenses_categories = [];			
-			
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-							
-				$expenses_array[$i]['id'] = $row['id'];
-				$expenses_array[$i]['name'] = $row['name'];
-				$temp_id_exp = $expenses_array[$i]['id'];
-				$temp_expenses = $expenses_array[$i]['name'];
-				array_push($tab_id_expenses, "$temp_id_exp");
-				array_push($expenses_categories, "$temp_expenses");
-				$i++;
-			}		
-			
-			return array($tab_id_expenses, $expenses_categories);
-		}
-		
-		return false;
-	}
-	
-	//Zwrócenie tablicy numerów id, odpowiadających danej kategorii wydatków (jeśli znajdują się w tabeli) dla danego użytkownika z tabeli "wydatki"
-	public function ExpensesStep2($user_id)
-	{
-		if (empty($this->errors)) {
-			$sql = "SELECT DISTINCT expense_category_assigned_to_user_id FROM expenses WHERE user_id = '$user_id' GROUP BY expense_category_assigned_to_user_id";					
-
-			$db = static::getDB();
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-			
-			$existing_numbers_id_of_categories_in_expenses = [];
-			
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-				$id_number_of_expense_category = $row['expense_category_assigned_to_user_id'];
-				array_push($existing_numbers_id_of_categories_in_expenses, "$id_number_of_expense_category");			
-			}
-			
-			return $existing_numbers_id_of_categories_in_expenses;
-		}
-		
-		return false;
-	}
-	
-	//Wyliczamy sumy kwot dla wszystkich kategorii wydatków dla zadanego okresu czasu i wstawiamy do tablicy
-	public function ExpensesStep3($user_id)
-	{
-		if (empty($this->errors)) {
-			$dates = [];
-			$dates = Dates::showMessage();
-			
-			$tab = [];
-			foreach ($dates as $key => $value) {			
-				array_push($tab, "$value");			
-			}
-					
-			$date_one = $tab[0];
-			$date_two = $tab[1];
-			
-			$sql = "SELECT expense_category_assigned_to_user_id, SUM(amount) AS sum FROM expenses WHERE date_of_expense BETWEEN '$date_one' AND '$date_two' AND user_id = '$user_id' GROUP BY expense_category_assigned_to_user_id";					
-
-			$db = static::getDB();
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-			
-			$sums_of_expenses_categories = [];		
-			
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {				
-				$temp_sum_expenses = $row['sum'];			
-				array_push($sums_of_expenses_categories, "$temp_sum_expenses");			
-			}
-			
-			return $sums_of_expenses_categories;
-		}
-		
-		return false;
-	}
-	
-	//Jeśli kategoria (jej nr id) znajduje się w tablicy "wydatki", to odpowiadająca numerowi id kwota zostanie wyciągnięta z tablicy sum i przypisana do nowej zmiennej, a następnie wstawiona do finalnej tablicy; jeśli jej nie ma, to przypisujemy jej wartość 0
-	public function ExpensesFinalStep($user_id)
-	{	
-		if (empty($this->errors)) {
-			$expenses_array = [];		
-			$expenses_array = Balancesheet::ExpensesStep1($user_id);
-			list($firstArray, $secondArray) = $expenses_array;
-			
-			$tab_size_expenses = count($firstArray);
-			$expenses_id_for_categories = [];
-			$expenses_categories = [];
-			
-			foreach ($firstArray as $key => $value) {			
-				array_push($expenses_id_for_categories, "$value");			
-			}
-			
-			foreach ($secondArray as $key => $value) {			
-				array_push($expenses_categories, "$value");			
-			}
-					
-			$existing_numbers_id_of_categories_in_expenses = [];		
-			$existing_numbers_id_of_categories_in_expenses = Balancesheet::ExpensesStep2($user_id);		
-			
-			$sums_of_expenses_categories = [];		
-			$sums_of_expenses_categories = Balancesheet::ExpensesStep3($user_id);
-					
-			$tab_expenses = [];
-			
-			for ($x = 0; $x < $tab_size_expenses; $x++) {				
-				if (in_array("$expenses_id_for_categories[$x]",  $existing_numbers_id_of_categories_in_expenses)) {
-					$pulled_out_amount_exp = array_shift($sums_of_expenses_categories);
-					if (is_null($pulled_out_amount_exp)) $pulled_out_amount_exp = 0;
-					$tab_expenses[$x] = $pulled_out_amount_exp;
-				}
-				else $tab_expenses[$x] = 0;				
-			}
-			
-			$final_tab_for_expenses = [];
-			$i = 0;
-			
-			for ($x = 0; $x < $tab_size_expenses; $x++) {				
-				if ($tab_expenses[$x] != 0) {
-					$final_tab_for_expenses[$i]['category'] = $expenses_categories[$x];
-					$final_tab_for_expenses[$i]['amount'] = $tab_expenses[$x];
-					$i++;
-				}				
-			}		
-			
-			return $final_tab_for_expenses;
-		}
-		
-		return false;
+		return $expenses;
 	}
 	
 	//Wyliczamy sumę całkowitą przychodów i wydatków
 	public function totalAmounts($user_id)
-	{
-		if (empty($this->errors)) {
-			$sums_of_incomes_categories = [];		
-			$sums_of_incomes_categories = Balancesheet::IncomesStep3($user_id);
+	{		
+		$sums_of_incomes_categories = Balancesheet::getIncomes($user_id);		
+		$incomes_total_amount = 0;		
 			
-			$incomes_total_amount = 0;		
-			
-			foreach ($sums_of_incomes_categories as $key => $value) {			
-				$incomes_total_amount += $value;
-			}
-			
-			$sums_of_expenses_categories = [];		
-			$sums_of_expenses_categories = Balancesheet::ExpensesStep3($user_id);
-			
-			$expenses_total_amount = 0;		
-			
-			foreach ($sums_of_expenses_categories as $key => $value) {			
-				$expenses_total_amount += $value;
-			}
-					
-			$total_amounts = [];
-			
-			//Bilans końcowy (przychody - wydatki)
-			$balance_sheet = $incomes_total_amount - $expenses_total_amount;
-			
-			if ($balance_sheet > 0) {
-				$final_message = "Gratulacje. Świetnie zarządzasz finansami!";
-			}
-			else if ($balance_sheet < 0) {
-				$final_message = "Uważaj, wpadasz w długi!";
-			}
-			else if ($balance_sheet == 0) {
-				$final_message = "Wyszedłeś na 0!";
-			}
-			
-			$amounts['totalIncomes'] = $incomes_total_amount;
-			$amounts['totalExpenses'] = $expenses_total_amount;
-			$amounts['total'] = $balance_sheet;
-			$amounts['message'] = $final_message;
-			$total_amounts[] = $amounts;
-			
-			return $total_amounts;
+		foreach ($sums_of_incomes_categories as ["sum" => $value]) {			
+			$incomes_total_amount += $value;
+		}
+	
+		$sums_of_expenses_categories = Balancesheet::getExpenses($user_id);		
+		$expenses_total_amount = 0;		
+		
+		foreach ($sums_of_expenses_categories as ["sum" => $value]) {			
+			$expenses_total_amount += $value;
+		}		
+		
+		//Bilans końcowy (przychody - wydatki)
+		$balance_sheet = $incomes_total_amount - $expenses_total_amount;
+		
+		if ($balance_sheet > 0) {
+			$final_message = "Gratulacje. Świetnie zarządzasz finansami!";
+		}
+		else if ($balance_sheet < 0) {
+			$final_message = "Uważaj, wpadasz w długi!";
+		}
+		else if ($balance_sheet == 0) {
+			$final_message = "Wyszedłeś na 0!";
 		}
 		
-		return false;
+		$total_amounts = [];
+		
+		$amounts['totalIncomes'] = $incomes_total_amount;
+		$amounts['totalExpenses'] = $expenses_total_amount;
+		$amounts['total'] = $balance_sheet;
+		$amounts['message'] = $final_message;
+		$total_amounts[] = $amounts;
+		
+		return $total_amounts;		
 	}
 	
 	//Wykres / CHART
 	public function chart($user_id)
-	{		
-		if (empty($this->errors)) {
-			$tab_expenses = [];		
-			$tab_expenses = Balancesheet::ExpensesFinalStep($user_id);
-			
-			$tab_size_expenses = count($tab_expenses);					
-			
-			foreach ($tab_expenses as $key => $value) {			
-				$tab_expenses['category'] = $key;
-				$tab_expenses['amount'] = $value;								
-			}		
-			
-			$expenses = [];
-			$expensesArray = [];
-			$expensesOnChart = [];
-			
-			for ($y = 0; $y < $tab_size_expenses; $y++) {			
-				$forChart['category'] = $tab_expenses[$y]['category'];
-				$forChart['amount'] = $tab_expenses[$y]['amount'];
-				$expenses[] = $forChart;						
-			}
-			
-			$expensesArray = json_decode(json_encode($expenses), True);
-			
-			foreach ($expensesArray as $chartPie) {					
-				array_push($expensesOnChart, array("label"=>$chartPie['category'], "y"=>$chartPie['amount']));		
-			}
-			
-			json_encode($expensesOnChart, JSON_NUMERIC_CHECK);
-			
-			return $expensesArray;
+	{
+		$tab_expenses = [];		
+		$tab_expenses = Balancesheet::getExpenses($user_id);
+		
+		$tab_size_expenses = count($tab_expenses);					
+		
+		foreach ($tab_expenses as ["sum" => $amount, "name" => $name]) {			
+			$tab_expenses['name'] = $name;
+			$tab_expenses['sum'] = $amount;								
+		}		
+		
+		$expenses = [];
+		$expensesArray = [];
+		$expensesOnChart = [];
+		
+		for ($y = 0; $y < $tab_size_expenses; $y++) {			
+			$forChart['category'] = $tab_expenses[$y]['name'];
+			$forChart['amount'] = $tab_expenses[$y]['sum'];
+			$expenses[] = $forChart;						
 		}
 		
-		return false;
+		$expensesArray = json_decode(json_encode($expenses), True);
+		
+		foreach ($expensesArray as $chartPie) {					
+			array_push($expensesOnChart, array("label"=>$chartPie['category'], "y"=>$chartPie['amount']));		
+		}
+		
+		json_encode($expensesOnChart, JSON_NUMERIC_CHECK);
+		
+		return $expensesArray;		
 	}
 }
 

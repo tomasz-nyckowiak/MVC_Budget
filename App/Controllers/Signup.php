@@ -18,7 +18,7 @@ class Signup extends \Core\Controller
 
         if ($user->save()) {
 
-            //$user->sendActivationEmail();			
+            $user->sendActivationEmail();			
 			
 			if (($user->saveIncomes()) && ($user->saveExpenses()) && ($user->savePayments())) {
 				
@@ -37,4 +37,18 @@ class Signup extends \Core\Controller
     {
         View::renderTemplate('Signup/success.html');
     }
+	
+	//Activate a new account
+	public function activateAction()
+    {
+        User::activate($this->route_params['token']);
+
+        $this->redirect('/signup/activated');        
+    }
+	
+	//Show the activation success page
+	public function activatedAction()
+    {
+        View::renderTemplate('Signup/activated.html');
+    }	
 }

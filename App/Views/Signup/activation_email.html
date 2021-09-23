@@ -1,3 +1,13 @@
-<h1>Account activation</h1>
+{% extends 'base.html' %}
 
-<p>Thank you for signing up. Please <a href="{{ url }}">click here to activate your account</a>.</p>
+{% block title %}Home{% endblock %}
+
+{% block body %}	
+	<div class="row">
+		<div class="col-auto">
+			<div class="settings p-2">
+				<p>Dziękujemy za rejestrację. Kliknij <a href="{{ url }}">w celu aktywacji konta</a>.</p>
+			</div>
+		</div>
+	</div>	
+{% endblock %}

@@ -75,64 +75,64 @@
 			</div>
 		</div>
 			
-			<!-- Modal -->
-			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Wybierz własny zakres dat:</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">							
-							<form id="modalForm" method="post">							
-								<div class="row d-flex justify-content-center align-items-center">
-									<div class="col-auto">
-										<label for="date1" class="col-form-label">Od:</label>
-									</div>
-									<div class="col-auto">
-										<input type="date" onchange="checkModalDates()" class="form-control" name="date1" id="date1" style="width:165px;" required>
-									</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Wybierz własny zakres dat:</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">							
+						<form id="modalForm" method="post">							
+							<div class="row d-flex justify-content-center align-items-center">
+								<div class="col-auto">
+									<label for="date1" class="col-form-label">Od:</label>
 								</div>
-								<div class="row d-flex justify-content-center align-items-center">
-									<div class="col-auto">
-										<label for="date2" class="col-form-label">do:</label>
-									</div>
-									<div class="col-auto">
-										<input type="date" onchange="checkModalDates()" class="form-control" name="date2" id="date2" style="width:165px;" required>
-									</div>
-								</div>						
-								
-								<div class="row d-flex justify-content-center align-items-center">
-									<div id="messageError" style="color: red"></div>
+								<div class="col-auto">
+									<input type="date" onchange="checkModalDates()" class="form-control" name="date1" id="date1" style="width:165px;" required>
 								</div>
-								
-								<div class="row d-flex justify-content-end align-items-center">
-									<button type="submit" name="selectedCU" id="save" class="btn btn-primary" disabled>Zatwierdź</button>
-								</div>						
-							</form>							
-						</div>
-						<div class="modal-footer justify-content-center">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetModal()">Zamknij</button>
-						</div>
+							</div>
+							<div class="row d-flex justify-content-center align-items-center">
+								<div class="col-auto">
+									<label for="date2" class="col-form-label">do:</label>
+								</div>
+								<div class="col-auto">
+									<input type="date" onchange="checkModalDates()" class="form-control" name="date2" id="date2" style="width:165px;" required>
+								</div>
+							</div>						
+							
+							<div class="row d-flex justify-content-center align-items-center">
+								<div id="messageError" style="color: red"></div>
+							</div>
+							
+							<div class="row d-flex justify-content-end align-items-center">
+								<button type="submit" name="selectedCU" id="save" class="btn btn-primary" disabled>Zatwierdź</button>
+							</div>						
+						</form>							
+					</div>
+					<div class="modal-footer justify-content-center">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetModal()">Zamknij</button>
 					</div>
 				</div>
 			</div>
-			<!-- End of modal -->
-			
-			<div class="row d-flex justify-content-center">
-				<div class="col-sm-6">			
-					<p style="text-align: center; background-image: url('/img/what-the-hex-dark.png');">Okres od {{ message.first_date }} do {{ message.second_date }}</p>
-				</div>
+		</div>
+		<!-- End of modal -->		
+		
+		<div class="row d-flex justify-content-center">
+			<div class="col-sm-6">			
+				<p style="text-align: center; background-image: url('/img/what-the-hex-dark.png');">Okres od {{ message.first_date }} do {{ message.second_date }}</p>
 			</div>
-			
+		</div>
+		
 		<div class="row d-flex justify-content-center gx-5 gy-3">
 			<div class="col-auto myTabs">	
 				<h2 class="h2 my-3"><span style="color: green">Przychody</span></h2>
 				<ul class="list-unstyled p-1 float-left">
 					{% for income in incomes %}			
-						<li>{{ income.category }} : {{ income.amount }}</li>			
+						<li>{{ income.name }} : {{ income.sum }}</li>			
 					{% endfor %}		
 					{% for sum in finalSums %}			
 						{% if sum.totalIncomes == 0 %}
@@ -148,7 +148,7 @@
 				<h2 class="h2 my-3"><span style="color: #e60000">Wydatki</span></h2>
 				<ul class="list-unstyled p-1 float-left">
 					{% for expense in expenses %}			
-						<li>{{ expense.category }} : {{ expense.amount }}</li>			
+						<li>{{ expense.name }} : {{ expense.sum }}</li>			
 					{% endfor %}
 					{% for sum in finalSums %}			
 						{% if sum.totalExpenses == 0 %}
